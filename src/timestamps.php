@@ -1,25 +1,37 @@
 <?php
 
+function convert($input) {
+  $search =  ["\""];
+  $replace = ['\"'];
+  $input = str_replace($search, $replace, $input);
+
+  $search =  ["ä",    "ö",    "ü",    "ß",    "Ä",    "Ö",   "Ü"];
+  $replace = ['\xe4" "', '\xf6" "', '\xfc" "', '\xdf" "', '\xc4" "','\xd6" "', '\xdc" "'];
+  return str_replace($search, $replace, $input);
+
+}
+
 $past_dates = [
   "standesamtlich" => "02.02.2018 21:00",
   "kirchlich" => "22.09.2018 15:00"
 ];
 
+
 $periods = [
   [
     "period" => 1,
     "name" => "Die Papierhochzeit",
-    "text" => "Der Grundgedanke hinter dieser Bezeichnung ist, dass die Ehe noch frisch und dünn wie Papier ist. Zwar fühlen sich die meisten Paare schon sehr stark verbunden, doch könnten „widrige Umstände“ die Ehe immer noch auflösen wie Nässe das Papier.\n Die Papierhochzeit ist einer der Hochzeitstage der meist in trauter Zweisamkeit gefeiert wird, um die Erinnerungen an die gemeinsame Zeit und den Tag der Trauung noch einmal wach zurufen."
+    "text" => "Der Grundgedanke hinter dieser Bezeichnung ist, dass die Ehe noch frisch und dünn wie Papier ist. Zwar fühlen sich die meisten Paare schon sehr stark verbunden, doch könnten \"widrige Umstände\" die Ehe immer noch auflösen wie Nässe das Papier.\n Die Papierhochzeit ist einer der Hochzeitstage der meist in trauter Zweisamkeit gefeiert wird, um die Erinnerungen an die gemeinsame Zeit und den Tag der Trauung noch einmal wach zurufen."
     ],
   [
     "period" => 2,
     "name" => "Die Baumwollenhochzeit",
-    "text" => "Das Brautpaar hat die ersten Höhen und Tiefen der Ehe hinter sich und kann mit diesen gut umgehen. Dadurch festigt sich der neue Bund und das Paar fühlt sich geboren. Der Name Baumwollhochzeit entstand, weil Baumwolle weich ist, gut wärm und damit die Geborgenheit in einer guten Ehe darstellt."
+    "text" => "Das Brautpaar hat die ersten Höhen und Tiefen der Ehe hinter sich und kann mit diesen gut umgehen. Dadurch festigt sich der neue Bund und das Paar fühlt sich geborgen. Der Name Baumwollhochzeit entstand, weil Baumwolle weich ist, gut wärmt und damit die Geborgenheit in einer guten Ehe darstellt."
     ],
   [
     "period" => 3,
     "name" => "Die Lederne Hochzeit",
-    "text" => "Leder ist widerstandsfähig und verlässlich. Daher soll bei der Ledernen Hochzeit gefeiert werden, dass sich die Ehepartner kennen und lieben – sowohl die schönen als auch die weniger schönen Seiten. Sie haben gelernt mit den Stimmungen des Partners umzugehen und den anderen so zu nehmen, wie er ist."
+    "text" => "Leder ist widerstandsfähig und verlässlich. Daher soll bei der Ledernen Hochzeit gefeiert werden, dass sich die Ehepartner kennen und lieben - sowohl die schönen als auch die weniger schönen Seiten. Sie haben gelernt mit den Stimmungen des Partners umzugehen und den anderen so zu nehmen, wie er ist."
     ],
   [
     "period" => 4,
@@ -39,7 +51,7 @@ $periods = [
   [
     "period" => 7,
     "name" => "Die Kupferne Hochzeit",
-    "text" => "Die Ehe glänzt nach sieben Jahren nicht mehr so neu, wie am ersten Tag. Aber unter der Schicht der Jahre liegt noch immer das „Schöne“ und „Wahre“. Aus der Verliebtheit ist eine innige Liebe geworden, die sich als Patina auf die Ehe gelegt hat."
+    "text" => "Die Ehe glänzt nach sieben Jahren nicht mehr so neu, wie am ersten Tag. Aber unter der Schicht der Jahre liegt noch immer das \"Schöne\" und \"Wahre\". Aus der Verliebtheit ist eine innige Liebe geworden, die sich als Patina auf die Ehe gelegt hat."
     ],
   [
     "period" => 8,
@@ -130,12 +142,32 @@ $periods = [
   [
     "period" => 70,
     "name" => "Die Gnadenhochzeit",
-    "text" => "Warum sich dieser Hochzeitstag „Gnadenhochzeit“ nennt, ist nicht überliefert. Auf jeden Fall ist es einer der ganz besonderen Hochzeitstage. Vielleicht, weil nach so langer Zeit nicht nur die Ehe in die Jahre gekommen ist, sondern auch das Ehepaar? Der Begriff Gnade wird fast ausschließlich mit dem Christentum und der damit verbundenen Gottesgnade in Verbindung gebracht und bedeutet hier „wohlwollend“."
+    "text" => "Warum sich dieser Hochzeitstag „Gnadenhochzeit“ nennt, ist nicht überliefert. Auf jeden Fall ist es einer der ganz besonderen Hochzeitstage. Vielleicht, weil nach so langer Zeit nicht nur die Ehe in die Jahre gekommen ist, sondern auch das Ehepaar? Der Begriff Gnade wird fast ausschließlich mit dem Christentum und der damit verbundenen Gottesgnade in Verbindung gebracht und bedeutet hier \"wohlwollend\"."
     ],
 
 
 ];
 
+$longest_name = 0;
+$longest_text = 0;
+
+foreach ($past_dates as $index_past_date => $past_date) {
+    foreach ($periods as $index_period => $info) {
+        $longest_name = max(strlen($info["name"]), $longest_name);
+        $longest_text = max(strlen($info["text"]), $longest_text);
+    }
+}
+
+
+?>
+struct hochzeitstag {
+  int period; char name[<?= $longest_name + 1 ?>]; char text[<?= $longest_text + 1 ?>];
+};
+
+<?php
+foreach (array_keys($past_dates) as $key => $name) {
+  print "#define ".strtoupper($name)." ${key}\n";
+}
 print "const char *dates[".sizeof($past_dates)."][".sizeof($periods)."];\n";
 
 foreach ($past_dates as $index_past_date => $past_date) {
@@ -143,7 +175,19 @@ foreach ($past_dates as $index_past_date => $past_date) {
     foreach ($periods as $index_period => $info) {
         $day = clone $date;
         $day->add(new DateInterval("P".$info["period"]."Y".(isset($info["month"]) ? $info["month"]."M" : "")));
-        print "dates[".$index_past_date."][".$index_period."] = ".$day->format("U")."\n";
+//        print "dates[".strtoupper($index_past_date)."][".$index_period."] = ".$day->format("U")."\n";
+        // print "hochzeitstage[".strtoupper($index_past_date)."][".$index_period."] =
 //    $date->format("c U")."   ".$day->format("c")."\n";
     }
 }
+
+print "struct hochzeitstag hochzeitstage[".sizeof($periods)."] = {\n";
+
+
+foreach ($periods as $index_period => $info) {
+  // print "hochzeitstage[".$index_period."].period  = ".$info["period"].";\n";
+  // print "hochzeitstage[".$index_period."].name  = \"".$info["name"]."\";\n";
+  // print "hochzeitstage[".$index_period."].text  = \"".preg_replace("/\n/m", '\n', $info["text"])."\";\n";
+  print "  {".$info["period"].", \"".convert($info["name"])."\", \"".preg_replace("/\n/m", '\n', convert($info["text"]))."\"},\n";
+}
+print "};\n";
