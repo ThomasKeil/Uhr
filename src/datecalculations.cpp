@@ -165,3 +165,49 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
 
   return result;
 }
+
+/*!
+  \param datum ein Pointer auf ein datum struct, welches vorgezählt wird
+  \param stunden int, die Stunden die vorgezählt werden sollten
+  \param tage int, die Tage die vorgezählt werden sollten
+  \param monate int, die Monate die vorgezählt werden sollen 
+*/
+void carry(struct datum &datum, int stunden, int tage, int monate) {
+  // das kann man bestimmt noch globaler machen
+  int days_in_month[]={31,28,31,30,31,30,31,31,30,31,30,31};
+
+  datum.stunde += stunden;
+  while (datum.stunde > 23) {
+    datum.tag++;
+    datum.stunde -= 24;
+  }
+
+  datum.tag += tage;
+  while (datum.tag > days_in_month[datum.monat - 1]) {
+    datum.tag -= days_in_month[datum.monat - 1];
+    datum.monat++;
+  }
+
+  datum.monat += monate;
+  while (datum.monat > 12) {
+    datum.jahr++;
+    datum.monat -= 12;
+  }
+}
+
+/*!
+  Bestimmt die Anzahl der Tage des Februars für ein bestimmtes Jahr
+
+  \param jahr Das Jahr um die Monate zu bestimmen
+  \return Ein int mit 28 oder 29
+ */
+int daysInFebruary(int jahr) {
+  int days = 28;
+  if (jahr%4==0 && (jahr%100!=0 || jahr%400==0)) {
+    days = 29;
+  }
+  #ifdef DC_DEBUG
+  printf("Der Februar hatte im Jahr %i %i Tage.\n", jahr, days);
+  #endif
+  return days;
+}
