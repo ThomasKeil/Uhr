@@ -170,7 +170,7 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
   \param datum ein Pointer auf ein datum struct, welches vorgezählt wird
   \param stunden int, die Stunden die vorgezählt werden sollten
   \param tage int, die Tage die vorgezählt werden sollten
-  \param monate int, die Monate die vorgezählt werden sollen 
+  \param monate int, die Monate die vorgezählt werden sollen
 */
 void carry(struct datum &datum, int stunden, int tage, int monate) {
   // das kann man bestimmt noch globaler machen
@@ -178,18 +178,31 @@ void carry(struct datum &datum, int stunden, int tage, int monate) {
 
   datum.stunde += stunden;
   while (datum.stunde > 23) {
+    // Da hier eigentlich eine beliebige Anzahl an Stunden drauf addiert werden könnte
+    // müssen wir solange Tage abziehen bis wir wieder unter 24 sind.
     datum.tag++;
     datum.stunde -= 24;
   }
 
-  datum.tag += tage;
+  datum.tag += tage; // Jetzt die gewünschten Tage aufaddieren.
+
   while (datum.tag > days_in_month[datum.monat - 1]) {
+    // Gleiches wie bei den Stunden, wir könnten mehr als einen Tag aufaddieren müssen.
+    days_in_month[1] = daysInFebruary(datum.jahr); // Der Array beginnt bei Januar = 0
+
     datum.tag -= days_in_month[datum.monat - 1];
     datum.monat++;
+
+    // Hier muss ggfs noch das Jahr korrigiert werden damit die Anzahl der Tage im Monat richtig bestimmt werden kann
+    if (datum.monat > 12) {
+      datum.monat = 1;
+      datum.jahr++;
+    }
   }
 
   datum.monat += monate;
   while (datum.monat > 12) {
+    //Gleiches wie bei Stunden und Tagen...
     datum.jahr++;
     datum.monat -= 12;
   }
