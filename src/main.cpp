@@ -6,10 +6,16 @@
 
 // #include "Utils.h"
 #include "Time.h"
+#include "WifiConfig.h"
+
 
 #define WIFI true
-#define YOUR_WIFI_SSID "MOENNEKEGAST"
-#define YOUR_WIFI_PASSWD "MOENNEKETEST"
+
+#ifndef WIFI_CONFIG_H
+  #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
+  #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
+#endif // !WIFI_CONFIG_H
+
 #define NTPSERVER "pool.ntp.org"
 
 // ernie wlan/ntp
