@@ -24,12 +24,20 @@
   #include <TimeLib.h>
   #include <NtpClientLib.h>
   #include <ESP8266WiFi.h>
+  #include <DNSServer.h>            //Local DNS Server used for redirecting all requests to the configuration portal
+  #include <ESP8266WebServer.h>     //Local WebServer used to serve the configuration portal
+  #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
+  #include <ESP8266mDNS.h>
+
 
   #define ONBOARDLED 2 // Built in LED on ESP-12/ESP-07
 
   int8_t timeZone = 1;
   int8_t minutesTimeZone = 0;
   bool wifiFirstConnected = false;
+
+  ESP8266WebServer server(80);
+
 #else
   bool wifi = false;
 #endif
@@ -65,6 +73,18 @@ const char *clckst[] {
 };
 
 #if WIFI
+
+
+   void handleRoot() {
+      static char message[512];
+      String test = server.argName(0);
+      test.toCharArray(message,test.length()+1);
+      server.send(200, "text/plain", "hello from esp8266! argv = "+ test);
+      Serial.println(message);
+      handleInput_auswertung(message);
+    }
+
+
   void onSTAConnected (WiFiEventStationModeConnected ipInfo) {
       Serial.printf ("Connected to %s\r\n", ipInfo.ssid.c_str ());
   }
@@ -109,14 +129,31 @@ void setup(void) {
   u8g2.begin();
 
 #if WIFI
-      static WiFiEventHandler e1, e2, e3;
-
-      Serial.println ();
+      WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
-      WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
+      wifiManager.autoConnect("Hochzeitsuhr");
+      //wifiManager.resetSettings();
+      static WiFiEventHandler e1, e2, e3;
+      Serial.println("Local IP");
+      Serial.println(WiFi.localIP());
+      Serial.println ();
+//      WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
 
       pinMode (ONBOARDLED, OUTPUT); // Onboard LED
-      digitalWrite (ONBOARDLED, LOW); // Switch off LED
+      digitalWrite (ONBOARDLED, LOW); // Switch on LED
+
+      digitalWrite (ONBOARDLED, HIGH); // Turn off LED
+      wifiFirstConnected = true;
+
+      if (MDNS.begin("Hochzeitsuhr")) {
+        Serial.println("MDNS responder started");
+      }
+
+
+      server.on("/", handleRoot);
+
+      server.begin();
+
 
       NTP.onNTPSyncEvent ([](NTPSyncEvent_t event) {
           ntpEvent = event;
@@ -144,6 +181,8 @@ void loop(void) {
         processSyncEvent (ntpEvent);
         syncEventTriggered = false;
     }
+      server.handleClient();
+
 /*
     static int i = 0;
     static int last = 0;

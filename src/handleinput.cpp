@@ -25,6 +25,11 @@ void handleInput() {
     } else {
       input[i] = '\0';
       i = 0;
+      handleInput_auswertung(input);
+    }
+  }
+}
+void handleInput_auswertung(char input[]) {
       Serial.println();
 
       if (!strncmp(input, "setdate", 7)) {
@@ -57,7 +62,7 @@ void handleInput() {
         }
       }
 
-      if (!strncmp(input, "help", 5)) {
+      if (!strncmp(input, "help", 4)) {
         Serial.println("help: Print this help");
         Serial.println("hello: Say hi!");
         Serial.println("currenttime: Prints the currently known time");
@@ -116,6 +121,4 @@ void handleInput() {
       //   Serial.println(" ");
       //   Serial.println("==============================");
       // }
-    }
-  }
 }

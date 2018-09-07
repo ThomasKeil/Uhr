@@ -9,7 +9,7 @@
 
 #include "Time.h"
 
-#include "Images/Stefanie_und_Patrick.xbm" // 250x34
+#include "Images/caro_und_sven.xbm" // 250x34
 #include "Images/Stefanie_und_Patrick_ccw.xbm" // 45x128
 #include "Images/GPS.xbm" // 110x110
 
@@ -54,8 +54,9 @@ u8g2_uint_t get_x_for_centered_text(char *text, const uint8_t *font) {
 void drawHeaderLarge() {
   char text[] = "Verheiratet seit";
   const uint8_t *font = u8g2_font_helvR12_tf;
+
   // graphic commands to redraw the complete screen should be placed here
-  u8g2.drawXBMP(23, 0, Stefanie_und_Patrick_width, Stefanie_und_Patrick_height, Stefanie_und_Patrick_bits);
+  u8g2.drawXBMP(23, 0, caro_und_sven_width, caro_und_sven_height, caro_und_sven_bits);
   u8g2.setFont(font);
 
   u8g2.drawStr(get_x_for_centered_text(text, font), 54, text);
@@ -82,7 +83,7 @@ void drawObtainingTime() {
 }
 
 void drawVerheiratetSeit(struct periode result) {
-  //    printf("%i Jahre, %i Monate, %i Tage, %i Monate gesamt, %i Tage gesamt, %i Stunden\n", result.jahre, result.monate, result.tage, result.monate_gesamt, result.tage_gesamt, result.stunden);
+      printf("%i Jahre, %i Monate, %i Tage, %i Monate gesamt, %i Tage gesamt, %i Stunden\n", result.jahre, result.monate, result.tage, result.monate_gesamt, result.tage_gesamt, result.stunden);
       char text[40] = "";
       char jahre_text[6]; // "Jahre" + \0
       char monate_text[7];
@@ -139,6 +140,14 @@ void drawVerheiratetSeit(struct periode result) {
       }
 
       u8g2.drawStr(get_x_for_centered_text(text, font), 80, text);
+      char zusatztext[80] = "";
+      sprintf(zusatztext,"Stunden: %i, Tage: %i, Monate: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
+      const uint8_t *font2 = u8g2_font_helvR08_tf;
+      u8g2.setFont(font2);
+      u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 100, zusatztext);
+      char uhrzeit[40] = "";
+      sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
+      u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
       Serial.printf("Ausgabe : %s\n", text);
       Serial.printf("Zusatz: Stunden gesamt: %i, Tage gesamt: %i, Monate gesamt: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
 
@@ -189,7 +198,7 @@ void drawHochzeitstagInfo(int tag_index) {
 }
 
 void screenVerheiratetSeit() {
-  struct datum start = { 2, 2, 2018, 21}, ende = {day(), month(), year(), hour()};
+  struct datum start = { 15, 9, 2012, 10}, ende = {day(), month(), year(), hour()};
   struct periode result = calculatePeriode(start, ende);
 
   u8g2.firstPage();
