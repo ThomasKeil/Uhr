@@ -10,6 +10,8 @@ struct periode {
 };
 
 struct periode calculatePeriode(struct datum datum1, struct datum datum2);
+int daysInFebruary(int jahr);
+int isEqual(struct datum datum1, struct datum datum2);
 
 enum string_items {
   CLOCK_STRING_YEAR_SINGLULAR,
