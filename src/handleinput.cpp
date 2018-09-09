@@ -62,7 +62,7 @@ void handleInput_auswertung(char input[]) {
         }
       }
 
-      if (!strncmp(input, "help", 4)) {
+      if (!strncmp(input, "help", 5)) {
         Serial.println("help: Print this help");
         Serial.println("hello: Say hi!");
         Serial.println("currenttime: Prints the currently known time");
@@ -70,7 +70,15 @@ void handleInput_auswertung(char input[]) {
         Serial.println("cleardisplay: Clear the display.");
         Serial.println("drawverheiratetseit: Display the info \"Verheiratet seit\"");
         Serial.println("ht X: Display info about Hochzeitstag 0-25" );
+        if (wifi_wlan) {
+          Serial.println("ip: Anzeige der IP-Addresse" );
+        }
         Serial.println();
+      }
+
+      if ( !strncmp(input, "ip", 3) ) {
+        Serial.print("ip = ");
+        Serial.println(wifiip);
       }
 
       if ( !strncmp(input, "currenttime", 11) ) {

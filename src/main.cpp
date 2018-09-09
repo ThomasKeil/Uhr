@@ -20,7 +20,7 @@
 
 // ernie wlan/ntp
 #if WIFI
-  bool wifi = true;
+  bool wifi_wlan = true;
   #include <TimeLib.h>
   #include <NtpClientLib.h>
   #include <ESP8266WiFi.h>
@@ -39,7 +39,7 @@
   ESP8266WebServer server(80);
 
 #else
-  bool wifi = false;
+  bool wifi_wlan = false;
 #endif
 
 #include "schnapszahlen.h"
@@ -47,16 +47,13 @@
 #include "displayinfos.h"
 #include "handleinput.h"
 
-// using namespace Utils;
-
-// #define DCF_PIN D1          // Connection pin to DCF 77 device
-// #define DCF_INTERRUPT D1    // Interrupt number associated with pin
-
 time_t time;
 unsigned int next_update = 0;
 extern int time_is_present = 0;
 
+extern char wifiip[16] = "keine ip";
 int seconds = 0;
+
 
 SoftwareSerial ESPserial(D6, D1); // RX | TX
 TinyGPSPlus gps;
@@ -73,17 +70,16 @@ const char *clckst[] {
 };
 
 #if WIFI
-
-
    void handleRoot() {
       static char message[512];
-      String test = server.argName(0);
-      test.toCharArray(message,test.length()+1);
+      String test = server.arg(0);
+      if (server.argName(0) == "action"){
+        test.toCharArray(message,test.length()+1);
+        handleInput_auswertung(message);
+      }
       server.send(200, "text/plain", "hello from esp8266! argv = "+ test);
       Serial.println(message);
-      handleInput_auswertung(message);
     }
-
 
   void onSTAConnected (WiFiEventStationModeConnected ipInfo) {
       Serial.printf ("Connected to %s\r\n", ipInfo.ssid.c_str ());
@@ -136,6 +132,8 @@ void setup(void) {
       static WiFiEventHandler e1, e2, e3;
       Serial.println("Local IP");
       Serial.println(WiFi.localIP());
+      IPAddress ip = WiFi.localIP();
+      sprintf(wifiip, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
       Serial.println ();
 //      WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
 
