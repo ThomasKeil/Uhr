@@ -4,6 +4,10 @@
 #include "handleinput.h"
 #include "displayinfos.h"
 
+
+extern struct datum hochzeitstag;
+
+
 void printCurrentTime() {
   char current_time[40];
   sprintf(current_time, "Bekannte Zeit: %02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
@@ -77,7 +81,9 @@ void handleInput() {
       }
 
       if (!strncmp(input, "drawverheiratetseit", 19)) {
-        screenVerheiratetSeit();
+        struct datum today = getNow();
+        struct periode elapsed = calculatePeriode(hochzeitstag, today);
+        screenVerheiratetSeit(elapsed);
       }
 
       if ( !strncmp(input, "hello", 5) ) {

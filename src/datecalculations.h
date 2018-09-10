@@ -26,4 +26,8 @@ enum string_items {
 
 extern const char *clckst[];
 
+struct datum getNow();
+
+struct datum getNext();
+
 #endif

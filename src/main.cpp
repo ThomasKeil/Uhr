@@ -21,6 +21,8 @@ time_t time;
 unsigned int next_update = 0;
 extern int time_is_present = 0;
 
+struct datum hochzeitstag;
+
 int seconds = 0;
 
 SoftwareSerial ESPserial(D6, D1); // RX | TX
@@ -42,6 +44,8 @@ void setup(void) {
   Serial.begin(9600);
   ESPserial.begin(9600);
   u8g2.begin();
+
+  hochzeitstag = { 2, 2, 2018, 21};
 }
 
 
@@ -74,8 +78,47 @@ void loop(void) {
 
   if (millis() > next_update) {
     if (time_is_present) {
-        screenVerheiratetSeit();
-        next_update = millis() + 60 * 10 * 1000 ;
+      struct datum today = getNow();
+      struct datum next = getNext(); // TODO
+
+      struct periode elapsed = calculatePeriode(hochzeitstag, today);
+      struct periode to_come = calculatePeriode(today, next);
+
+      char description[20];
+
+      if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
+      {
+        // TODO: Hocheitstag Info
+      }
+      else if(isSpecial(elapsed.stunden_gesamt, 3, 1, description))  // Ist eine Stunden "Schnapszahl" für vergangene Zeit?
+      {
+        // TODO: Schnapszahl Info
+      }
+      else if(isSpecial(to_come.stunden_gesamt, 3, 1, description)) // Ist eine Stunde "Schnapszahl" für den kommenden Hochzeitstag?
+      {
+        // TODO: Schnapszahl info KOMMENDER Tag
+      }
+      else if(to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
+      {
+        // TODO: Anstehender Hochzeitstag Info
+      }
+      else if (isSpecial(elapsed.monate_gesamt, 2, 1, description)) // Haben wir eine Schnapszahl mit Monaten der vergangene Zeit?
+      {
+        // TODO: Schnapszahl Info
+      }
+      else if (isSpecial(elapsed.tage_gesamt, 2, 1, description)) // Haben wir eine Schnapszahl mit Tagen der vergangene Zeit?
+      {
+        // TODO: Schnapszahl Info
+      }
+      else if (isSpecial(to_come.tage_gesamt, 2, 1, description)) // haben wir eine Schnapszahl mit Tagen für den kommenden Hochzeitstag?
+      {
+        // TODO: Schnapszahl info KOMMENDER Tag
+      }
+      else // Trifft alles nicht zu, daher default zeigen.
+      {
+        screenVerheiratetSeit(elapsed);
+      }
+      next_update = millis() + 60 * 10 * 1000 ;
     } else {
       u8g2.firstPage();
       u8g2.setPowerSave(0);	// before drawing, enable charge pump (req. 300ms)

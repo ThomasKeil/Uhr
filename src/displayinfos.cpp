@@ -15,6 +15,7 @@
 
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
 
+extern struct datum hochzeitstag;
 
 void mehrzahl(char* result, int zahl, const char *einzahl, const char *mehrzahl) {
   switch (zahl) {
@@ -188,15 +189,12 @@ void drawHochzeitstagInfo(int tag_index) {
 
 }
 
-void screenVerheiratetSeit() {
-  struct datum start = { 2, 2, 2018, 21}, ende = {day(), month(), year(), hour()};
-  struct periode result = calculatePeriode(start, ende);
-
+void screenVerheiratetSeit(struct periode elapsed) {
   u8g2.firstPage();
   u8g2.setPowerSave(0);	// before drawing, enable charge pump (req. 300ms)
   do {
     drawHeaderLarge();
-    drawVerheiratetSeit(result);
+    drawVerheiratetSeit(elapsed);
   } while ( u8g2.nextPage() );
   u8g2.setPowerSave(1);	// disable charge pump
 }
