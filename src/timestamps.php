@@ -75,7 +75,7 @@ $periods = [
     ],
   [
     "period" => 12,
-    "name" => "Die Nickelhchzeit",
+    "name" => "Die Nickelhochzeit",
     "text" => "Nickel ist ein Metall, das wegen seiner hohen Widerstandsfähigkeit gegenüber Luft, Wasser, Säuren und Laugen gerne in viel benutzten Gegenständen zusammen mit anderen Metallen verarbeitet wird. Es gilt als sehr beständig und so bedeutet die Nickelhochzeit, dass auch die Ehe nach 12 Jahren eine gewisse Beständigkeit hat. Das Ehepaar kennt sich nach so vielen Jahren in- und auswendig und hat es gelernt, auch den Alltag zu meistern."
     ],
   [
@@ -101,7 +101,7 @@ $periods = [
   [
     "period" => 17,
     "name" => "Die Orchideenhochzeit",
-    "text" => "Die Orchidee gilt nicht nur als eine sehr wertvolle Blüte, sondern auch als eine Pflanze, die schwer zu pflegen ist. Deswegen hat der Name Orchideenhochzeit wohl zweierlei Bedeutung. Einerseits weist er darauf hin, dass eine Ehe, die 17 Jahre lang gut gegangen ist, als besonders wertvoll betrachtet werden darf. Andererseits macht er gleichzeitig darauf aufmerksam, dass es nicht so einfach ist, den 17. Hochzeitstag zu erreichen. Denn nur wer seine Liebe pflegt, den Partne  respektiert und sich in Notlagen unterstützt, kann die Orchideenhochzeit feiern."
+    "text" => "Die Orchidee gilt nicht nur als eine sehr wertvolle Blüte, sondern auch als eine Pflanze, die schwer zu pflegen ist. Deswegen hat der Name Orchideenhochzeit wohl zweierlei Bedeutung. Einerseits weist er darauf hin, dass eine Ehe, die 17 Jahre lang gut gegangen ist, als wertvoll betrachtet werden darf. Andererseits macht er darauf aufmerksam, dass es nicht so einfach ist, den 17. Hochzeitstag zu erreichen. Denn nur wer seine Liebe pflegt kann die Orchideenhochzeit feiern." // ZU LANG nur bis : "Partner respektiert"
   ],
   [
     "period" => 18,
@@ -111,12 +111,12 @@ $periods = [
   [
     "period" => 19,
     "name" => "Die Perlmutthochzeit",
-    "text" => "Ebenso wie das harte Perlmutt einige Jahre braucht, um seine Widerstandsfähigkeit zu erreichen, hat auch die 19–jährige Ehe einige Zeit benötigt, um ihre jetzige Stabilität zu erreichen. Nach fast einem fünftel Jahrhundert ist die Partnerschaft so fest wie Perlmutt. Die Eheleute verstehen sich ohne Worte und wissen genau, um die Freuden und Leiden des Partners bescheid."
+    "text" => "Ebenso wie das harte Perlmutt einige Jahre braucht, um seine Widerstandsfähigkeit zu erreichen, hat auch die 19 jährige Ehe einige Zeit benötigt, um ihre jetzige Stabilität zu erreichen. Nach fast einem fünftel Jahrhundert ist die Partnerschaft so fest wie Perlmutt. Die Eheleute verstehen sich ohne Worte und wissen genau, um die Freuden und Leiden des Partners bescheid."
   ],
   [
     "period" => 20,
     "name" => "Die Porzellan Hochzeit",
-    "text" => "Weil gutes Porzellan teuer und edel ist, wurde es schon früher als "das Gold in Weiß" bezeichnet. Und genau aus diesen Eigenschaften heraus lässt sich auch der Name für das 20. Hochzeitsjubiläum ableiten. Denn schließlich darf eine Ehe, in der sich die Partner bereits seit 20 Jahren treu zur Seite stehen, ebenfalls als teuer und kostbar angesehen werden. Nicht viele Paare erreichen dieses Hochzeitsjubiläum."
+    "text" => "Weil gutes Porzellan teuer und edel ist, wurde es schon früher als \"das Gold in Weiß\" bezeichnet. Und genau aus diesen Eigenschaften heraus lässt sich auch der Name für das 20. Hochzeitsjubiläum ableiten. Denn schließlich darf eine Ehe, in der sich die Partner bereits seit 20 Jahren treu zur Seite stehen, ebenfalls als teuer und kostbar angesehen werden. Nicht viele Paare erreichen dieses Hochzeitsjubiläum."
   ],
   [
     "period" => 21,
@@ -151,22 +151,22 @@ $periods = [
   [
     "period" => 35,
     "name" => "Die Leinen Hochzeit",
-    "text" => "Wie auch alle anderen Bezeichnungen der Hochzeitstage stammt der Name Leinwandhochzeit aus früheren Zeiten. Er ist entstanden, als es die Fotografie noch nicht gab. Denn damals ließen sich die Jubelpaare als Andenken an ihren 35. Hochzeitstag auf Leinwand malen. Die Leinwand wurde gewählt, weil sie aus Leinen bestand und Leinen, beziehungsweise Linnen, ein fester und extrem reißfester Stoff ist. Trotz seiner Robustheit ist Leinen flexibel und lässt sich daher mit seinen typischen Eigenschaften hervorragend als Symbol für eine so lange bestehende Lebensgemeinschaft verwenden."
+    "text" => "Die Bezeichnung Leinwandhochzeit stammt aus früheren Zeiten. Er ist entstanden, als es die Fotografie noch nicht gab. Damals ließen sich die Jubelpaare als Andenken an ihren 35. Hochzeitstag auf Leinwand malen. Sie wurde gewählt, weil sie aus Leinen bestand und es ein fester und extrem reißfester Stoff ist. Trotz seiner Robustheit ist Leinen flexibel und lässt sich daher mit seinen typischen Eigenschaften hervorragend als Symbol für eine so lange bestehende Lebensgemeinschaft verwenden." // ZU LANG nur bis "typischen Eigenschaften"
     ],
   [
     "period" => 40,
     "name" => "Die Rubin Hochzeit",
-    "text" => "Der Edelstein Rubin, als Namensgeber, wird als Stein des Lebens und der Liebe bezeichnet. Man sagt ihm nach, dass er die Kräfte aller anderen Edelsteine vereint.\nRot steht dabei für das Feuer der Liebe, das auch nach 40 Ehejahren noch immer leuchtet. Traditionell wird am Tag der Rubinhochzeit der Ehering der Frau mit einem roten Rubin veredelt."
+    "text" => "Der Edelstein Rubin, als Namensgeber, wird als Stein des Lebens und der Liebe bezeichnet. Man sagt ihm nach, dass er die Kräfte aller anderen Edelsteine vereint. Rot steht dabei für das Feuer der Liebe, das auch nach 40 Ehejahren noch immer leuchtet. Traditionell wird am Tag der Rubinhochzeit der Ehering der Frau mit einem roten Rubin veredelt."
     ],
   [
     "period" => 45,
     "name" => "Die Messinghochzeit",
-    "text" => "ie Bedeutung dieses Tages leitet sich von den Eigenschaften des Metalls ab. Messing ist schwer, extrem haltbar, aber dennoch dehnbar.\nGenauso verhält es sich auch mit der Ehe nach 45 Jahren. Sie wiegt schwer und ist doch noch flexibel. Und nach 45 Jahren weit sie auch eine gewisse Haltbarkeit auf, viele Paar werden sich jetzt nicht mehr trennen, egal was jetzt noch kommen mag."
+    "text" => "Die Bedeutung dieses Tages leitet sich von den Eigenschaften des Metalls ab. Messing ist schwer, extrem haltbar, aber dennoch dehnbar. Genauso verhält es sich auch mit der Ehe nach 45 Jahren. Sie wiegt schwer und ist doch noch flexibel. Und nach 45 Jahren weit sie auch eine gewisse Haltbarkeit auf, viele Paar werden sich jetzt nicht mehr trennen, egal was jetzt noch kommen mag."
     ],
   [
     "period" => 50,
     "name" => "Die Goldene Hochzeit",
-    "text" => "Wow, 50 Jahre verheiratet, ein halbes Jahrhundert Ehemann und Ehefrau. Was liegt da näher als dieses Jubiläum mit einem der edelsten Metalle der Welt zu feiern. Viele Paare erneuern nach 50 Jahren ihr Ehegelöbnis in der Kirche und feiern gemeinsam mit Verwandten, Bekannten und Freunden.\nDa sich die meisten Jubilare bei ihrer Goldenen Hochzeit schon in gehobenen Alter befinden, wird das Fest meist von den Kindern und Enkeln ausgerichtet. Die Jubilare dürfen sich dabei ihre Träume, die bei Ihrer Hochzeitsfeier zu kurz kamen, erfüllen. Damit ist die Goldene Hochzeit einer der wichtigsten Hochzeitstage. Ein wundervolles Geschenk ist ein Zweitring zur Ehe."
+    "text" => "Wow, 50 Jahre verheiratet, ein halbes Jahrhundert Ehemann und Ehefrau. Was liegt da näher als dieses Jubiläum mit einem der edelsten Metalle der Welt zu feiern. Viele Paare erneuern nach 50 Jahren ihr Ehegelöbnis in der Kirche und feiern gemeinsam mit Verwandten, Bekannten und Freunden. Da sich die meisten Jubilare bei ihrer Goldenen Hochzeit schon in gehobenen Alter befinden, wird das Fest meist von den Kindern und Enkeln ausgerichtet."
     ],
   [
     "period" => 55,
@@ -186,7 +186,7 @@ $periods = [
   [
     "period" => 70,
     "name" => "Die Gnadenhochzeit",
-    "text" => "Warum sich dieser Hochzeitstag „Gnadenhochzeit“ nennt, ist nicht überliefert. Auf jeden Fall ist es einer der ganz besonderen Hochzeitstage. Vielleicht, weil nach so langer Zeit nicht nur die Ehe in die Jahre gekommen ist, sondern auch das Ehepaar? Der Begriff Gnade wird fast ausschließlich mit dem Christentum und der damit verbundenen Gottesgnade in Verbindung gebracht und bedeutet hier \"wohlwollend\"."
+    "text" => "Warum sich dieser Hochzeitstag \"Gnadenhochzeit\" nennt, ist nicht überliefert. Auf jeden Fall ist es einer der ganz besonderen Hochzeitstage. Vielleicht, weil nach so langer Zeit nicht nur die Ehe in die Jahre gekommen ist, sondern auch das Ehepaar? Der Begriff Gnade wird fast ausschließlich mit dem Christentum und der damit verbundenen Gottesgnade in Verbindung gebracht und bedeutet hier \"wohlwollend\"."
     ],
 
 
