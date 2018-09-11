@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "Time.h"
 
 #include "datecalculations.h"
 
@@ -111,4 +112,15 @@ int isEqual(struct datum datum1, struct datum datum2) {
   if (datum1.tag != datum2.tag) return 0;
   if (datum1.stunde != datum2.stunde) return 0;
   return 1;
+}
+
+struct datum getNow() {
+  struct datum now = {day(), month(), year(), hour()};
+  return now;
+}
+
+struct datum getNext() {
+  // TODO: Provisorium ersetzen
+  struct datum now = {day(), month(), year(), hour()};
+  return now;
 }

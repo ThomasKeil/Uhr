@@ -3,6 +3,23 @@
 #include <string.h>
 #include "schnapszahlen.h"
 
+int isSpecial(signed int zahl, signed int minimal_length, signed int periode, char *description) {
+  if (schnapszahl(zahl, periode)) {
+    printf(description, "Dies ist eine Schnapszahl");
+    return 1;
+  }
+  if (palindrom(zahl, minimal_length)) {
+    printf(description, "Dies ist ein Palindrom");
+    return 1;
+  }
+  if (upsidedown(zahl, minimal_length)) {
+    printf(description, "Diese Zahl kann gedreht werden");
+    return 1;
+  }
+
+  return 0;
+}
+
 int schnapszahl(signed int zahl, signed int periode) {
         char input[30];
 
