@@ -3,6 +3,8 @@
 
 #include "datecalculations.h"
 
+extern struct datum hochzeitstag;
+
 
 // Siehe: http://latest-technology-guide.blogspot.com/2013/03/c-language-example-36-find-date.html
 
@@ -106,12 +108,21 @@ int daysInFebruary(int jahr) {
   return days;
 }
 
+int datumToInt(struct datum datum) {
+  int result = datum.jahr * 1000000 + datum.monat * 10000 + datum.tag * 100 + datum.stunde;
+  return result;
+}
+
 int isEqual(struct datum datum1, struct datum datum2) {
-  if (datum1.jahr != datum2.jahr) return 0;
-  if (datum1.monat != datum2.monat) return 0;
-  if (datum1.tag != datum2.tag) return 0;
-  if (datum1.stunde != datum2.stunde) return 0;
-  return 1;
+  int d1 = datumToInt(datum1);
+  int d2 = datumToInt(datum2);
+  return d1 == d2;
+}
+
+int isSmaller(struct datum datum1, struct datum datum2) {
+  int d1 = datumToInt(datum1);
+  int d2 = datumToInt(datum2);
+  return d1 < d2;
 }
 
 struct datum getNow() {
@@ -120,7 +131,39 @@ struct datum getNow() {
 }
 
 struct datum getNext() {
-  // TODO: Provisorium ersetzen
   struct datum now = {day(), month(), year(), hour()};
-  return now;
+  struct datum next = {hochzeitstag.tag, hochzeitstag.monat, now.jahr, hochzeitstag.stunde};
+
+  int tagesnummer_now = getTagesnummer(now);
+  int tagesnummer_hochzeitstag = getTagesnummer(hochzeitstag);
+
+  if (tagesnummer_now > tagesnummer_hochzeitstag) {
+    next.jahr++;
+  }
+
+  return next;
+}
+
+int getDaysInMonth(int month, int year) {
+  int february = 28;
+  if (year%4==0 && (year%100!=0 || year%400==0)) {
+    february = 29;
+  }
+
+  int days_in_month[]={31,february,31,30,31,30,31,31,30,31,30,31};
+  return days_in_month[month - 1];
+}
+
+int getTagesnummer(struct datum datum) {
+  struct datum cursor = {1,1,datum.jahr,0};
+  int tagesnummer = 1;
+  while (isSmaller(cursor, datum)) {
+    cursor.tag++;
+    tagesnummer++;
+    if (cursor.tag > getDaysInMonth(cursor.monat, cursor.jahr)) {
+      cursor.tag = 1;
+      cursor.monat++;
+    }
+  }
+  return tagesnummer;
 }

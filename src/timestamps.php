@@ -116,7 +116,7 @@ $periods = [
   [
     "period" => 20,
     "name" => "Die Porzellan Hochzeit",
-    "text" => "Weil gutes Porzellan teuer und edel ist, wurde es schon früher als "das Gold in Weiß" bezeichnet. Und genau aus diesen Eigenschaften heraus lässt sich auch der Name für das 20. Hochzeitsjubiläum ableiten. Denn schließlich darf eine Ehe, in der sich die Partner bereits seit 20 Jahren treu zur Seite stehen, ebenfalls als teuer und kostbar angesehen werden. Nicht viele Paare erreichen dieses Hochzeitsjubiläum."
+    "text" => "Weil gutes Porzellan teuer und edel ist, wurde es schon früher als \"das Gold in Weiß\" bezeichnet. Und genau aus diesen Eigenschaften heraus lässt sich auch der Name für das 20. Hochzeitsjubiläum ableiten. Denn schließlich darf eine Ehe, in der sich die Partner bereits seit 20 Jahren treu zur Seite stehen, ebenfalls als teuer und kostbar angesehen werden. Nicht viele Paare erreichen dieses Hochzeitsjubiläum."
   ],
   [
     "period" => 21,
@@ -212,6 +212,7 @@ struct hochzeitstag {
 foreach (array_keys($past_dates) as $key => $name) {
   print "#define ".strtoupper($name)." ${key}\n";
 }
+print "#define hochzeitstage_count ".sizeof($periods)."\n";
 print "const char *dates[".sizeof($past_dates)."][".sizeof($periods)."];\n";
 
 foreach ($past_dates as $index_past_date => $past_date) {

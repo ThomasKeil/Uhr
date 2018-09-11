@@ -79,7 +79,7 @@ void loop(void) {
   if (millis() > next_update) {
     if (time_is_present) {
       struct datum today = getNow();
-      struct datum next = getNext(); // TODO
+      struct datum next = getNext();
 
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
       struct periode to_come = calculatePeriode(today, next);
