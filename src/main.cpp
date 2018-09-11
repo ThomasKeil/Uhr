@@ -55,7 +55,7 @@ extern char wifiip[16] = "keine ip";
 int seconds = 0;
 
 
-SoftwareSerial ESPserial(D6, D1); // RX | TX
+SoftwareSerial ESPserial(D6, SW_SERIAL_UNUSED_PIN); // RX | TX
 TinyGPSPlus gps;
 
 const char *clckst[] {
@@ -127,8 +127,9 @@ void setup(void) {
 #if WIFI
       WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
+      wifiManager.setTimeout(15);
       wifiManager.autoConnect("Hochzeitsuhr");
-      //wifiManager.resetSettings();
+//      wifiManager.resetSettings();
       static WiFiEventHandler e1, e2, e3;
       Serial.println("Local IP");
       Serial.println(WiFi.localIP());

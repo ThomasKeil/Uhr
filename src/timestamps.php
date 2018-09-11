@@ -101,7 +101,7 @@ $periods = [
   [
     "period" => 17,
     "name" => "Die Orchideenhochzeit",
-    "text" => "Die Orchidee gilt nicht nur als eine sehr wertvolle Blüte, sondern auch als eine Pflanze, die schwer zu pflegen ist. Deswegen hat der Name Orchideenhochzeit wohl zweierlei Bedeutung. Einerseits weist er darauf hin, dass eine Ehe, die 17 Jahre lang gut gegangen ist, als wertvoll betrachtet werden darf. Andererseits macht er darauf aufmerksam, dass es nicht so einfach ist, den 17. Hochzeitstag zu erreichen. Denn nur wer seine Liebe pflegt kann die Orchideenhochzeit feiern." // ZU LANG nur bis : "Partner respektiert"
+    "text" => "Die Orchidee gilt nicht nur als eine sehr wertvolle Blüte, sondern auch als eine Pflanze, die schwer zu pflegen ist. Deswegen hat der Name Orchideenhochzeit wohl zweierlei Bedeutung. Einerseits weist er darauf hin, dass eine Ehe, die 17 Jahre lang gut gegangen ist, als wertvoll betrachtet werden darf. Andererseits macht er darauf aufmerksam, dass es nicht so einfach ist, den 17. Hochzeitstag zu erreichen. Denn nur wer seine Liebe pflegt kann die Orchideenhochzeit feiern." 
   ],
   [
     "period" => 18,
@@ -151,7 +151,7 @@ $periods = [
   [
     "period" => 35,
     "name" => "Die Leinen Hochzeit",
-    "text" => "Die Bezeichnung Leinwandhochzeit stammt aus früheren Zeiten. Er ist entstanden, als es die Fotografie noch nicht gab. Damals ließen sich die Jubelpaare als Andenken an ihren 35. Hochzeitstag auf Leinwand malen. Sie wurde gewählt, weil sie aus Leinen bestand und es ein fester und extrem reißfester Stoff ist. Trotz seiner Robustheit ist Leinen flexibel und lässt sich daher mit seinen typischen Eigenschaften hervorragend als Symbol für eine so lange bestehende Lebensgemeinschaft verwenden." // ZU LANG nur bis "typischen Eigenschaften"
+    "text" => "Die Bezeichnung Leinwandhochzeit stammt aus früheren Zeiten. Er ist entstanden, als es die Fotografie noch nicht gab. Damals ließen sich die Jubelpaare als Andenken an ihren 35. Hochzeitstag auf Leinwand malen. Sie wurde gewählt, weil sie aus Leinen bestand und es ein fester und extrem reißfester Stoff ist. Trotz seiner Robustheit ist Leinen flexibel und lässt sich daher mit seinen typischen Eigenschaften hervorragend als Symbol für eine so lange bestehende Lebensgemeinschaft verwenden." 
     ],
   [
     "period" => 40,

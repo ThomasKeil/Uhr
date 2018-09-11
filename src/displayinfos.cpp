@@ -13,7 +13,7 @@
 #include "Images/Stefanie_und_Patrick_ccw.xbm" // 45x128
 #include "Images/GPS.xbm" // 110x110
 
-U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
+U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D2, /* dc=*/ D1, /* reset=*/ D3);
 
 
 void mehrzahl(char* result, int zahl, const char *einzahl, const char *mehrzahl) {
