@@ -15,3 +15,6 @@ Entwickelt mit Atom/Platformio
 * Auslesen des GPS-Empfängers:
   [TinyGPS++](http://arduiniana.org/libraries/tinygpsplus/)
   [Github](https://github.com/mikalhart/TinyGPSPlus)
+* SoftwareSerial [https://www.arduino.cc/en/Reference/SoftwareSerial]
+* Time 
+* NTPClient Zeit von einem NTP server holen.
