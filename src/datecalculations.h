@@ -16,6 +16,8 @@ int getTagesnummer(struct datum datum);
 int isSmaller(struct datum datum1, struct datum datum2);
 int isEqual(struct datum datum1, struct datum datum2);
 int getDaysInMonth(int month, int year);
+struct datum getNow();
+struct datum getNextWeddingDayDate();
 
 enum string_items {
   CLOCK_STRING_YEAR_SINGLULAR,
@@ -29,9 +31,5 @@ enum string_items {
 };
 
 extern const char *clckst[];
-
-struct datum getNow();
-
-struct datum getNext();
 
 #endif

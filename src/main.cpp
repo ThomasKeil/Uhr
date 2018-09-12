@@ -7,9 +7,9 @@
 // #include "Utils.h"
 #include "Time.h"
 
-#define WIFI true
-#define YOUR_WIFI_SSID "MOENNEKEGAST"
-#define YOUR_WIFI_PASSWD "MOENNEKETEST"
+#define WIFI false
+#define YOUR_WIFI_SSID ""
+#define YOUR_WIFI_PASSWD ""
 #define NTPSERVER "pool.ntp.org"
 
 // ernie wlan/ntp
@@ -155,10 +155,10 @@ void loop(void) {
         Serial.print (WiFi.isConnected () ? "connected" : "not connected"); Serial.print (". ");
         Serial.print ("Uptime: ");
         Serial.print (NTP.getUptimeString ()); Serial.print (" since ");
-        Serial.println (NTP.getTimeDateString (NTP.getFirstSync ()).c_str ()); 
+        Serial.println (NTP.getTimeDateString (NTP.getFirstSync ()).c_str ());
         i++;
     }
-*/    
+*/
     delay (0);
 #else // wifi ende
   // time_t DCFtime = DCF.getTime(); // Check if new DCF77 time is available
@@ -189,7 +189,8 @@ void loop(void) {
   if (millis() > next_update) {
     if (time_is_present) {
       struct datum today = getNow();
-      struct datum next = getNext();
+      struct datum next = getNextWeddingDayDate();
+      Serial.printf("Next: %i.%i.%i\n", next.tag, next.monat, next.jahr);
 
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
       struct periode to_come = calculatePeriode(today, next);
@@ -198,7 +199,9 @@ void loop(void) {
 
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
-        // TODO: Hocheitstag Info
+        int count = 2;
+        Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
+        screenHochzeitstaginfo(count);
       }
       else if(isSpecial(elapsed.stunden_gesamt, 3, 1, description))  // Ist eine Stunden "Schnapszahl" für vergangene Zeit?
       {
@@ -210,7 +213,11 @@ void loop(void) {
       }
       else if(to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
       {
-        // TODO: Anstehender Hochzeitstag Info
+        int count = next.jahr - hochzeitstag.jahr;
+        Serial.printf("Nächster Hochzeitstag: der %i.\n",count);
+        if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht,  das Hochzeitstag ist
+          screenUpcomingWeddingDay(elapsed, next, count);
+        }
       }
       else if (isSpecial(elapsed.monate_gesamt, 2, 1, description)) // Haben wir eine Schnapszahl mit Monaten der vergangene Zeit?
       {
@@ -248,8 +255,8 @@ void loop(void) {
     }
 
   }
-  
+
   handleInput();
   //delay(10);
-  
+
 }

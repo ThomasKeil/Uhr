@@ -15,9 +15,11 @@ void drawObtainingTime();
 void drawVerheiratetSeit(struct periode elapsed);
 void drawSchnapszahl(struct periode result);
 void drawHochzeitstagInfo(int tag_index);
+void drawNextWeddingDay(struct datum date, int count);
 void clearDisplay();
 void screenVerheiratetSeit(struct periode elapsed);
 void screenHochzeitstaginfo(int tag_index);
+void screenUpcomingWeddingDay(struct periode elapsed, struct datum next_wedding_day, int count);
 
 
 #endif

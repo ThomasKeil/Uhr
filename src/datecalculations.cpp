@@ -130,7 +130,7 @@ struct datum getNow() {
   return now;
 }
 
-struct datum getNext() {
+struct datum getNextWeddingDayDate() {
   struct datum now = {day(), month(), year(), hour()};
   struct datum next = {hochzeitstag.tag, hochzeitstag.monat, now.jahr, hochzeitstag.stunde};
 
