@@ -4,9 +4,10 @@ struct hochzeitstag {
 
 #define STANDESAMTLICH 0
 #define KIRCHLICH 1
-#define hochzeitstage_count 34
-const char *dates[2][34];
-struct hochzeitstag hochzeitstage[34] = {
+#define hochzeitstage_count 35
+const char *dates[2][35];
+struct hochzeitstag hochzeitstage[35] = {
+  {0, "Hochzeitstag","Juhu heute Hochzeitstag"}, // noch text einfügen !!!!
   {1, "Die Papierhochzeit", "Wie jeder wei\xdf" ", ist Papier nicht besonders stabil. So gilt auch die Partnerschaft nach einem Ehejahr noch lange nicht als gefestigt. Sie ist hauchd\xfc" "nn, wie Papier und kann leicht zerrei\xdf" "en. Dennoch haben die Eheleute das erste Ehejahr erfolgreich gemeistert. Das hei\xdf" "t nat\xfc" "rlich nicht, dass es immer ein reines Honigschlecken war. Sicherlich musste das junge Paar schon so manche Klippe umschiffen. Daher sollten Sie auch das erste Ehejubil\xe4" "um nicht ohne Worte unter den Tisch kehren."},
   {2, "Die Baumwollenhochzeit", "Obwohl die Baumwolle ein recht robuster Stoff ist, der sich bei sehr hohen Temperaturen waschen l\xe4" "sst, wird sie mit jeder Reinigung etwas d\xfc" "nner. Um diesen Vergleich nun auf die Baumwollene Hochzeit anzuwenden, hei\xdf" "t das: Die Ehe ist nach zwei gemeinsam verbrachten Jahren sicherlich schon relativ fest. Sie ger\xe4" "t auch durch st\xe4" "rkere Ersch\xfc" "tterungen nicht aus den Fugen."},
   {3, "Die Lederne Hochzeit", "Nach drei Jahren Ehe ist die Beziehung nicht mehr so d\xfc" "nn, wie Papier. Sie wird nicht bei jedem kleinen Problem auf die Zerrei\xdf" "probe gestellt, sondern ist mittlerweile so z\xe4" "h, wie Leder. Allerdings sollten sich die Ehepartner bewusst sein, dass auch eine gefestigte Beziehung gepflegt werden will. Denn, ebenso wie Leder spr\xf6" "de wird, wenn Sie es vernachl\xe4" "ssigen, leidet auch die Ehe, wenn sie nur noch vor sich hinpl\xe4" "tschert."},

@@ -9,7 +9,7 @@
 //#include "WifiConfig.h"
 
 
-#define WIFI true
+#define WIFI false
 #define YOUR_WIFI_SSID ""
 #define YOUR_WIFI_PASSWD ""
 #define NTPSERVER "pool.ntp.org"
@@ -247,7 +247,11 @@ void loop(void) {
 
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
-        int count = 2;
+        int count = today.jahr - hochzeitstag.jahr;
+        Serial.printf("today %i - hochzeitstag %i\n",today.jahr,hochzeitstag.jahr);
+        Serial.print("count = ");
+        Serial.println(count);
+//        int count = 2;
         Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
         screenHochzeitstaginfo(count);
       }
@@ -283,8 +287,6 @@ void loop(void) {
       {
         screenVerheiratetSeit(elapsed);
       }
-
-      screenVerheiratetSeit(elapsed);
 
       next_update = millis() + 60 * 10 * 1000 ;
     } else {

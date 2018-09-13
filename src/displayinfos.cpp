@@ -10,7 +10,7 @@
 #include "Time.h"
 
 #include "Images/caro_und_sven.xbm" // 250x34
-#include "Images/Stefanie_und_Patrick_ccw.xbm" // 45x128
+#include "Images/caro_und_sven_ccw.xbm" // 45x128
 #include "Images/GPS.xbm" // 110x110
 
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D2, /* dc=*/ D1, /* reset=*/ D3);
@@ -74,7 +74,7 @@ void drawHeaderLarge() {
 }
 
 void drawHeaderccw() {
-  u8g2.drawXBMP(0, 0, Stefanie_und_Patrick_ccw_width, Stefanie_und_Patrick_ccw_height, Stefanie_und_Patrick_ccw_bits);
+  u8g2.drawXBMP(0, 0, caro_und_sven_ccw_width, caro_und_sven_ccw_height, caro_und_sven_ccw_bits);
 
 }
 
@@ -156,7 +156,7 @@ void drawVerheiratetSeit(struct periode result) {
       const uint8_t *font2 = u8g2_font_helvR08_tf;
       u8g2.setFont(font2);
       u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 90, zusatztext);
-      char uhrzeit[40] = "";
+//      char uhrzeit[40] = "";
 //      sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
 //      u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
       Serial.printf("Ausgabe : %s\n", text);
@@ -169,9 +169,23 @@ void drawSchnapszahl(struct periode result) {
 }
 
 void drawHochzeitstagInfo(int tag_index) {
+  int zaehler;
+  int tmp;
+  tmp = tag_index;
+  for (zaehler = 0; zaehler < hochzeitstage_count; zaehler++) {
+    if (tmp == hochzeitstage[zaehler].period) {
+      tag_index = zaehler;
+      break;
+    } else {
+      tag_index = 0;
+    }
+  }
+
   const uint8_t *large_font = u8g2_font_9x18B_tf;
   u8g2.setFont(large_font);
-  u8g2.drawStr(55, 10, hochzeitstage[tag_index].name);
+  char ueberschrift[50];
+  sprintf(ueberschrift,"%i. %s",hochzeitstage[tag_index].period, hochzeitstage[tag_index].name);
+  u8g2.drawStr(55, 10, ueberschrift);
 
 
   const uint8_t *font = u8g2_font_lucasfont_alternate_tf;
