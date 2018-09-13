@@ -74,14 +74,19 @@ const char *clckst[] {
 
 #if WIFI
    void handleRoot() {
+      server.send(200, "text/html", "<h2>Hochzeitsuhr</h2><br><a href=\"/action?ip=1\">ip anzeigen</a><br>\
+        <a href=\"action?cleardisplay=1\">Display l&ouml;schen</a><br>\
+        <a href=\"action?drawverheiratetseit=1\">Verheiratet seit auf Display</a><br>\
+        <a href=\"action?currenttime=1\">Aktuelle Zeit</a><br>\
+        ");
+    }
+
+   void handleAction() {
       static char message[512];
-      String test = server.arg(0);
-      if (server.argName(0) == "action"){
+      String test = server.argName(0);
         test.toCharArray(message,test.length()+1);
         handleInput_auswertung(message);
-      }
-      server.send(200, "text/plain", "hello from esp8266! argv = "+ test);
-      Serial.println(message);
+        server.send(200, "text/plain", "hello from esp8266! argv = "+ test);
     }
 
   void onSTAConnected (WiFiEventStationModeConnected ipInfo) {
@@ -127,7 +132,7 @@ void setup(void) {
   ESPserial.begin(9600);
   u8g2.begin();
 
-  hochzeitstag = { 2, 2, 2018, 21};
+  hochzeitstag = { 15, 9, 2012, 10};
 #if WIFI
       WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
@@ -153,6 +158,7 @@ void setup(void) {
        }
 
 
+      server.on("/action", handleAction);
       server.on("/", handleRoot);
 
       server.begin();
