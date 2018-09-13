@@ -7,6 +7,7 @@
 
 ## Software
 Entwickelt mit Atom/Platformio
+und mit SublimeText/Plattformio/Deviot
 
 ### Libraries
 
@@ -15,6 +16,14 @@ Entwickelt mit Atom/Platformio
 * Auslesen des GPS-Empfängers:
   [TinyGPS++](http://arduiniana.org/libraries/tinygpsplus/)
   [Github](https://github.com/mikalhart/TinyGPSPlus)
-* SoftwareSerial [https://www.arduino.cc/en/Reference/SoftwareSerial]
+* SoftwareSerial https://www.arduino.cc/en/Reference/SoftwareSerial
 * Time 
+
+
+#### Für den Betrieb ohne GPS-Empfänger nur mit WLAN
+* ESP8266WiFi general WiFi für den ESP8266
 * NTPClient Zeit von einem NTP server holen.
+* WiFiManager https://github.com/tzapu/WiFiManager
+* DNSServer lokaler DNS Server zum umleiten für den WiFiManager
+* ESP8266mDNS um einfach auf den Webserver zu kommen mit http://hochzeitsuhr.local
+* ESP8266WebServer lokalen Webserver um den WiFiManager anzuzeigen
