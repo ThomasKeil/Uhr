@@ -33,6 +33,16 @@ void mehrzahl(char* result, int zahl, const char *einzahl, const char *mehrzahl)
   }
 }
 
+int getHochzeitstagTitel(int index, char *titel) {
+    for (int i=0; i < hochzeitstage_count; i++) {
+      struct hochzeitstag ht = hochzeitstage[i];
+      if (ht.period == index) {
+        strcpy(titel, ht.name);
+        return true;
+      }
+    }
+    return false;
+}
 
 void clearDisplay() {
   u8g2.firstPage();
@@ -48,7 +58,7 @@ u8g2_uint_t get_x_for_centered_text(char *text, const uint8_t *font) {
   u8g2.setFont(font);
   text_width = u8g2.getStrWidth(text);
   display_width = u8g2.getDisplayWidth();
-  Serial.print("Display width: "); Serial.println(display_width);
+  // Serial.print("Display width: "); Serial.println(display_width);
   return (display_width / 2) - (text_width / 2);
 }
 
@@ -198,6 +208,20 @@ void drawHochzeitstagInfo(int tag_index) {
 
 }
 
+void drawNextWeddingDay(struct datum date, int count) {
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  u8g2.setFont(font);
+
+  char text[40] = "";
+  sprintf(text, "Am %02i.%02i.%i ist der %i. Hochzeitstag", date.tag, date.monat, date.jahr, count);
+  u8g2.drawStr(get_x_for_centered_text(text, font), 105, text);
+
+  char titel[25] = "";
+  if (getHochzeitstagTitel(count, titel)) {
+    u8g2.drawStr(get_x_for_centered_text(titel, font), 130, titel);    
+  }
+}
+
 void screenVerheiratetSeit(struct periode elapsed) {
   u8g2.firstPage();
   u8g2.setPowerSave(0);	// before drawing, enable charge pump (req. 300ms)
@@ -214,6 +238,17 @@ void screenHochzeitstaginfo(int tag_index) {
   do {
     drawHeaderccw();
     drawHochzeitstagInfo(tag_index);
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1);	// disable charge pump
+
+}
+void screenUpcomingWeddingDay(struct periode elapsed, struct datum next_wedding_day, int count) {
+  u8g2.firstPage();
+  u8g2.setPowerSave(0);	// before drawing, enable charge pump (req. 300ms)
+  do {
+    drawHeaderLarge();
+    drawVerheiratetSeit(elapsed);
+    drawNextWeddingDay(next_wedding_day, count);
   } while ( u8g2.nextPage() );
   u8g2.setPowerSave(1);	// disable charge pump
 

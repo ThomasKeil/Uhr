@@ -6,7 +6,7 @@
 
 
 extern struct datum hochzeitstag;
-
+extern unsigned int next_update;
 
 void printCurrentTime() {
   char current_time[40];
@@ -43,13 +43,13 @@ void handleInput_auswertung(char input[]) {
         int dummy = 0, day = 0, month = 0, year = 0;
         // initialisieren und ersten Abschnitt erstellen, den werfen wir gleich weg
         ptr = strtok(input, delimiter);
-        Serial.println(ptr);
+        // Serial.println(ptr);
 
         ptr = strtok(NULL, delimiter);
         while(ptr != NULL) {
-          Serial.println(ptr);
+          // Serial.println(ptr);
           dummy = atoi(ptr);
-          Serial.printf("Found: %i\n", dummy);
+          // Serial.printf("Found: %i\n", dummy);
           if (day == 0) {
             day = dummy;
           } else if (month == 0) {
@@ -58,12 +58,13 @@ void handleInput_auswertung(char input[]) {
             year = dummy;
             setTime(hour(),minute(),second(),day,month,year);
             time_is_present = 1;
-            Serial.println("Date was set");
+            // Serial.println("Date was set");
           }
 
           ptr = strtok(NULL, delimiter);
 
         }
+        next_update = 0;
       }
 
       if (!strncmp(input, "help", 5)) {
@@ -71,7 +72,8 @@ void handleInput_auswertung(char input[]) {
         Serial.println("hello: Say hi!");
         Serial.println("currenttime: Prints the currently known time");
         Serial.println("setdate DD.MM.YYYY");
-        Serial.println("cleardisplay: Clear the display.");
+        Serial.println("clear: Clear the display.");
+        Serial.println("refresh: Refreshes the display");
         Serial.println("drawverheiratetseit: Display the info \"Verheiratet seit\"");
         Serial.println("ht X: Display info about Hochzeitstag 0-25" );
         if (wifi_wlan) {
@@ -89,8 +91,13 @@ void handleInput_auswertung(char input[]) {
         printCurrentTime();
       }
 
-      if (!strncmp(input, "cleardisplay", 12)) {
+      if (!strncmp(input, "clear", 5)) {
         clearDisplay();
+      }
+
+      if (!strncmp(input, "refresh", 7)) {
+        Serial.println("OK, reseting cyle");
+        next_update = 0;
       }
 
       if (!strncmp(input, "drawverheiratetseit", 19)) {
@@ -111,11 +118,11 @@ void handleInput_auswertung(char input[]) {
         // initialisieren und ersten Abschnitt erstellen, den werfen wir gleich weg
         ptr = strtok(input, delimiter);
 
-        Serial.println(ptr);
+        // Serial.println(ptr);
 
         ptr = strtok(NULL, delimiter);
         while(ptr != NULL) {
-          Serial.println(ptr);
+          // Serial.println(ptr);
           dummy = atoi(ptr);
           if (dummy >= 0 && dummy < 34) {
               screenHochzeitstaginfo(dummy);
@@ -124,15 +131,4 @@ void handleInput_auswertung(char input[]) {
 
         }
       }
-
-      // if ( !strncmp(input, "sa", 2) ) {
-      //   Serial.print("  ss= ");
-      //   Serial.print(ss);
-      //
-      //   Serial.print("  bHold= ");
-      //   Serial.print(bHold);
-      //
-      //   Serial.println(" ");
-      //   Serial.println("==============================");
-      // }
 }

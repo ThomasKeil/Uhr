@@ -212,6 +212,7 @@ struct hochzeitstag {
 foreach (array_keys($past_dates) as $key => $name) {
   print "#define ".strtoupper($name)." ${key}\n";
 }
+print "#define hochzeitstage_count ".sizeof($periods)."\n";
 print "const char *dates[".sizeof($past_dates)."][".sizeof($periods)."];\n";
 
 foreach ($past_dates as $index_past_date => $past_date) {
