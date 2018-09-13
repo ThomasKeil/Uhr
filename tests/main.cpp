@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include "../src/schnapszahlen.h"
 #include "../src/datecalculations.h"
 
@@ -11,11 +12,15 @@ void print_datum(struct datum datum) {
   printf("%i.%i.%i %i:00 Uhr\n", datum.tag, datum.monat, datum.jahr, datum.stunde);
 }
 
-void test_periode(struct datum start, struct datum ende) {
+void test_periode(struct datum start, struct datum ende, struct datum assert_datum) {
   print_datum(ende);
 
   struct periode result = calculatePeriode(start, ende);
   print_result(result);
+  assert(result.jahre == assert_datum.jahr);
+  assert(result.monate == assert_datum.monat);
+  assert(result.tage == assert_datum.tag);
+  assert(result.stunden == assert_datum.stunde);
   printf("\n");
 }
 
@@ -47,41 +52,27 @@ int main() {
 
 
 
-  struct datum start = { 2, 2, 2018, 21};
+  struct datum start = { 15, 9, 2012, 10};
   struct datum ende;
+  struct datum assert_datum;
 
   print_datum(start);
   printf("\n");
 
-  ende = {2, 2, 2018, 22};
+  ende = (struct datum ) {16, 9, 2018, 8};
+  assert_datum = (struct datum ) {0, 0, 6, 22};
+  test_periode(start, ende,assert_datum);
+
+  ende = (struct datum ) {14, 9, 2018, 8};
+  assert_datum = (struct datum ) {0, 0, 6, 12};
+  test_periode(start, ende,assert_datum);
+/*
+  ende = (struct datum ) {15, 9, 2013, 15};
   test_periode(start, ende);
 
-  ende = {3, 2, 2018, 2};
+  ende = (struct datum ) {4, 9, 2018, 18};
   test_periode(start, ende);
-
-  ende = {3, 2, 2018, 22};
-  test_periode(start, ende);
-
-  ende = {4, 2, 2018, 20};
-  test_periode(start, ende);
-
-  ende = {1, 3, 2018, 21};
-  test_periode(start, ende);
-
-  ende = {2, 3, 2018, 21};
-  test_periode(start, ende);
-
-  ende = {3, 3, 2018, 21};
-  test_periode(start, ende);
-
-  ende = {1, 9, 2018, 11};
-  test_periode(start, ende);
-
-  ende = {2, 2, 2019, 21};
-  test_periode(start, ende);
-
-  ende = {3, 2, 2039, 21};
-  test_periode(start, ende);
+*/
 
 
 }

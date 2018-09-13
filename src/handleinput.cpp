@@ -29,6 +29,11 @@ void handleInput() {
     } else {
       input[i] = '\0';
       i = 0;
+      handleInput_auswertung(input);
+    }
+  }
+}
+void handleInput_auswertung(char input[]) {
       Serial.println();
 
       if (!strncmp(input, "setdate", 7)) {
@@ -71,7 +76,15 @@ void handleInput() {
         Serial.println("refresh: Refreshes the display");
         Serial.println("drawverheiratetseit: Display the info \"Verheiratet seit\"");
         Serial.println("ht X: Display info about Hochzeitstag 0-25" );
+        if (wifi_wlan) {
+          Serial.println("ip: Anzeige der IP-Addresse" );
+        }
         Serial.println();
+      }
+
+      if ( !strncmp(input, "ip", 3) ) {
+        Serial.print("ip = ");
+        Serial.println(wifiip);
       }
 
       if ( !strncmp(input, "currenttime", 11) ) {
