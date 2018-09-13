@@ -154,11 +154,11 @@ void drawVerheiratetSeit(struct periode result) {
       char zusatztext[80] = "";
       sprintf(zusatztext,"Stunden: %i, Tage: %i, Monate: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
       const uint8_t *font2 = u8g2_font_helvR08_tf;
-      u8g2.setFont(font2);
-      u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 100, zusatztext);
+//      u8g2.setFont(font2);
+//      u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 100, zusatztext);
       char uhrzeit[40] = "";
-      sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
-      u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
+//      sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
+//      u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
       Serial.printf("Ausgabe : %s\n", text);
       Serial.printf("Zusatz: Stunden gesamt: %i, Tage gesamt: %i, Monate gesamt: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
 
@@ -218,7 +218,7 @@ void drawNextWeddingDay(struct datum date, int count) {
 
   char titel[25] = "";
   if (getHochzeitstagTitel(count, titel)) {
-    u8g2.drawStr(get_x_for_centered_text(titel, font), 130, titel);    
+    u8g2.drawStr(get_x_for_centered_text(titel, font), 125, titel);    
   }
 }
 

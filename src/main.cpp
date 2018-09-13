@@ -6,10 +6,10 @@
 
 // #include "Utils.h"
 #include "Time.h"
-#include "WifiConfig.h"
+//#include "WifiConfig.h"
 
 
-#define WIFI false
+#define WIFI true
 #define YOUR_WIFI_SSID ""
 #define YOUR_WIFI_PASSWD ""
 #define NTPSERVER "pool.ntp.org"
@@ -244,7 +244,7 @@ void loop(void) {
       struct periode to_come = calculatePeriode(today, next);
 
       char description[20];
-/*
+
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
         int count = 2;
@@ -283,7 +283,7 @@ void loop(void) {
       {
         screenVerheiratetSeit(elapsed);
       }
-*/
+
       screenVerheiratetSeit(elapsed);
 
       next_update = millis() + 60 * 10 * 1000 ;
