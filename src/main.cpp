@@ -6,10 +6,7 @@
 
 // #include "Utils.h"
 #include "Time.h"
-#include "WifiConfig.h"
-
-
-#define WIFI true
+#include "config.h"
 
 #ifndef WIFI_CONFIG_H
   #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
@@ -126,7 +123,7 @@ void setup(void) {
   ESPserial.begin(9600);
   u8g2.begin();
 
-  hochzeitstag = { 2, 2, 2018, 21};
+  hochzeitstag = HOCHZEITSTAG;
 #if WIFI
       WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
@@ -233,7 +230,9 @@ void loop(void) {
     if (time_is_present) {
       struct datum today = getNow();
       struct datum next = getNextWeddingDayDate();
-      Serial.printf("Next: %i.%i.%i\n", next.tag, next.monat, next.jahr);
+      int count = next.jahr - hochzeitstag.jahr;
+
+      Serial.printf("Next: %i.%i.%i, der %i.\n", next.tag, next.monat, next.jahr, count);
 
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
       struct periode to_come = calculatePeriode(today, next);
@@ -242,7 +241,6 @@ void loop(void) {
 
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
-        int count = 2;
         Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
         screenHochzeitstaginfo(count);
       }
@@ -256,9 +254,8 @@ void loop(void) {
       }
       else if(to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
       {
-        int count = next.jahr - hochzeitstag.jahr;
         Serial.printf("Nächster Hochzeitstag: der %i.\n",count);
-        if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht,  das Hochzeitstag ist
+        if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht, das Hochzeitstag ist
           screenUpcomingWeddingDay(elapsed, next, count);
         }
       }

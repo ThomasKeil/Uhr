@@ -16,5 +16,10 @@ Entwickelt mit Atom/Platformio
   [TinyGPS++](http://arduiniana.org/libraries/tinygpsplus/)
   [Github](https://github.com/mikalhart/TinyGPSPlus)
 * SoftwareSerial [https://www.arduino.cc/en/Reference/SoftwareSerial]
-* Time 
+* Time
 * NTPClient Zeit von einem NTP server holen.
+
+### Installation
+
+* `config.h.dist` nach `config.h` kopieren und nach Wunsch anpassen.
+* Die Dateien `Images/header.xbm` und `Images/header_ccw.xbm` erzeugen. In den .dist Dateien sind Beispiele.

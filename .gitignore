@@ -6,3 +6,7 @@
 .gcc-flags.json
 
 tests/date_test
+
+src/config.h
+src/Images/header.xbm
+src/Images/header_ccw.xbm

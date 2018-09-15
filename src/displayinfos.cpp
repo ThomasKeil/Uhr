@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
+#include <Time.h>
 
 #include "schnapszahlen.h"
 #include "datecalculations.h"
@@ -7,11 +8,9 @@
 #include "displayinfos.h"
 #include "dateinfo.h"
 
-#include "Time.h"
-
-#include "Images/caro_und_sven.xbm" // 250x34
-#include "Images/Stefanie_und_Patrick_ccw.xbm" // 45x128
-#include "Images/GPS.xbm" // 110x110
+#include "Images/header.xbm"
+#include "Images/header_ccw.xbm"
+#include "Images/GPS.xbm"
 
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
 
@@ -67,14 +66,14 @@ void drawHeaderLarge() {
   const uint8_t *font = u8g2_font_helvR12_tf;
 
   // graphic commands to redraw the complete screen should be placed here
-  u8g2.drawXBMP(23, 0, caro_und_sven_width, caro_und_sven_height, caro_und_sven_bits);
+  u8g2.drawXBMP(23, 0, header_width, header_height, header_bits);
   u8g2.setFont(font);
 
   u8g2.drawStr(get_x_for_centered_text(text, font), 54, text);
 }
 
 void drawHeaderccw() {
-  u8g2.drawXBMP(0, 0, Stefanie_und_Patrick_ccw_width, Stefanie_und_Patrick_ccw_height, Stefanie_und_Patrick_ccw_bits);
+  u8g2.drawXBMP(0, 0, header_ccw_width, header_ccw_height, header_ccw_bits);
 
 }
 
@@ -102,6 +101,8 @@ void drawVerheiratetSeit(struct periode result) {
       char stunden_text[8];
 
       const uint8_t *font = u8g2_font_helvR12_tf;
+      const uint8_t *font2 = u8g2_font_helvR08_tf;
+
       u8g2.setFont(font);
 
       if (result.jahre > 0) {
@@ -151,14 +152,20 @@ void drawVerheiratetSeit(struct periode result) {
       }
 
       u8g2.drawStr(get_x_for_centered_text(text, font), 80, text);
+
+      #ifdef DRAW_ADDITIONAL_ELAPSED
       char zusatztext[80] = "";
       sprintf(zusatztext,"Stunden: %i, Tage: %i, Monate: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
-      const uint8_t *font2 = u8g2_font_helvR08_tf;
       u8g2.setFont(font2);
       u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 100, zusatztext);
+      #endif
+
+      #ifdef DRAW_CURRENT_TIME
       char uhrzeit[40] = "";
       sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
       u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
+      #endif
+
       Serial.printf("Ausgabe : %s\n", text);
       Serial.printf("Zusatz: Stunden gesamt: %i, Tage gesamt: %i, Monate gesamt: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
 
@@ -218,7 +225,7 @@ void drawNextWeddingDay(struct datum date, int count) {
 
   char titel[25] = "";
   if (getHochzeitstagTitel(count, titel)) {
-    u8g2.drawStr(get_x_for_centered_text(titel, font), 130, titel);    
+    u8g2.drawStr(get_x_for_centered_text(titel, font), 130, titel);
   }
 }
 
