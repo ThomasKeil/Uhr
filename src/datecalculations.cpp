@@ -40,7 +40,6 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
   result.tage_gesamt = 0;
   result.monate_gesamt = 0;
   result.stunden_gesamt = 0;
-
   // Hier starten wir.
   struct datum cursor = datum1;
 
@@ -137,7 +136,7 @@ struct datum getNextWeddingDayDate() {
   int tagesnummer_now = getTagesnummer(now);
   int tagesnummer_hochzeitstag = getTagesnummer(hochzeitstag);
 
-  if (tagesnummer_now > tagesnummer_hochzeitstag) {
+  if (tagesnummer_now >= tagesnummer_hochzeitstag) {
     next.jahr++;
   }
 
