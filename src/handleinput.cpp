@@ -124,7 +124,7 @@ void handleInput_auswertung(char input[]) {
         while(ptr != NULL) {
           // Serial.println(ptr);
           dummy = atoi(ptr);
-          if (dummy >= 0 && dummy < 34) {
+          if (dummy >= 0 && dummy < 35) {
               screenHochzeitstaginfo(dummy);
           }
           ptr = strtok(NULL, delimiter);
