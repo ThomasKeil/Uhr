@@ -2,7 +2,15 @@
 #ifndef WIFI_CONFIG_H
 #define WIFI_CONFIG_H
 
+#define HOCHZEITSTAG { 1, 1, 1970, 0};
+
+#define WIFI false
 #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
 #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
+
+// Un-comment these as needed
+
+// #define DRAW_ADDITIONAL_ELAPSED
+// #define DRAW_CURRENT_TIME
 
 #endif //WIFI_CONFIG_H

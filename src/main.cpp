@@ -6,12 +6,13 @@
 
 // #include "Utils.h"
 #include "Time.h"
-//#include "WifiConfig.h"
+#include "config.h"
 
+#ifndef WIFI_CONFIG_H
+  #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
+  #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
+#endif // !WIFI_CONFIG_H
 
-#define WIFI true
-#define YOUR_WIFI_SSID ""
-#define YOUR_WIFI_PASSWD ""
 #define NTPSERVER "pool.ntp.org"
 
 // ernie wlan/ntp
@@ -47,10 +48,9 @@ time_t time;
 unsigned int next_update = 0;
 extern int time_is_present = 0;
 
-extern char wifiip[16] = "keine ip";
-
 struct datum hochzeitstag;
 
+extern char wifiip[16] = "keine ip";
 int seconds = 0;
 
 
@@ -128,7 +128,7 @@ void setup(void) {
   ESPserial.begin(9600);
   u8g2.begin();
 
-  hochzeitstag = { 15, 9, 2012, 11};
+  hochzeitstag = HOCHZEITSTAG;
 #if WIFI
       WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
@@ -171,7 +171,6 @@ void setup(void) {
 
 #endif
 }
-
 
 /* draw something on the display with the `firstPage()`/`nextPage()` loop*/
 void loop(void) {
@@ -238,45 +237,55 @@ void loop(void) {
     if (time_is_present) {
       struct datum today = getNow();
       struct datum next = getNextWeddingDayDate();
-      Serial.printf("Next: %i.%i.%i\n", next.tag, next.monat, next.jahr);
+      int count = next.jahr - hochzeitstag.jahr;
+
+      Serial.printf("Next: %i.%i.%i, der %i.\n", next.tag, next.monat, next.jahr, count);
+
+      Serial.printf("Berechne Vergangenes\n");
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
+
+      Serial.printf("Berechne kommenden Hochzeitstag.\n");
       struct periode to_come = calculatePeriode(today, next);
 
-      char description[20];
+      char description[40];
+      char text[40];
 
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
-        int count = today.jahr - hochzeitstag.jahr;
         Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
         screenHochzeitstaginfo(count);
       }
       else if(isSpecial(elapsed.stunden_gesamt, 3, 1, description))  // Ist eine Stunden "Schnapszahl" für vergangene Zeit?
       {
-        // TODO: Schnapszahl Info
+        Serial.printf("Schnapszahl vergangene Stunden %i wird gezeigt.\n", elapsed.stunden_gesamt);
+        sprintf(text, "Verheiratet %i Stunden.", elapsed.stunden_gesamt);
+        screenSchnapszahl(elapsed, text, description);
       }
       else if(isSpecial(to_come.stunden_gesamt, 3, 1, description)) // Ist eine Stunde "Schnapszahl" für den kommenden Hochzeitstag?
       {
-        // TODO: Schnapszahl info KOMMENDER Tag
+        Serial.printf("Schnapszahl Stunden %i kommender HT wird gezeigt\n", to_come.stunden_gesamt);
+        Serial.println(description);
+        sprintf(text, "Hochzeitstag in %i Stunden.", to_come.stunden_gesamt);
+        screenSchnapszahl(elapsed, text, description);
       }
       else if(to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
       {
-        int count = next.jahr - hochzeitstag.jahr;
         Serial.printf("Nächster Hochzeitstag: der %i.\n",count);
-        if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht,  das Hochzeitstag ist
+        if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht, das Hochzeitstag ist
           screenUpcomingWeddingDay(elapsed, next, count);
         }
       }
-      else if (isSpecial(elapsed.monate_gesamt, 2, 1, description)) // Haben wir eine Schnapszahl mit Monaten der vergangene Zeit?
-      {
-        // TODO: Schnapszahl Info
-      }
       else if (isSpecial(elapsed.tage_gesamt, 2, 1, description)) // Haben wir eine Schnapszahl mit Tagen der vergangene Zeit?
       {
-        // TODO: Schnapszahl Info
+        Serial.printf("Schnapszahl vergangene Tage %i wird gezeigt.\n", elapsed.tage_gesamt);
+        sprintf(text, "Verheiratet %i Tagen.", elapsed.tage_gesamt);
+        screenSchnapszahl(elapsed, text, description);
       }
       else if (isSpecial(to_come.tage_gesamt, 2, 1, description)) // haben wir eine Schnapszahl mit Tagen für den kommenden Hochzeitstag?
       {
-        // TODO: Schnapszahl info KOMMENDER Tag
+        Serial.printf("Schnapszahl Tage %i kommender HT wird gezeigt", to_come.tage_gesamt);
+        sprintf(text, "Hochzeitstag in %i Tagen.", to_come.tage_gesamt);
+        screenSchnapszahl(elapsed, text, description);
       }
       else // Trifft alles nicht zu, daher default zeigen.
       {
@@ -289,17 +298,10 @@ void loop(void) {
       u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
       do {
         drawObtainingTime();
-//          drawHochzeitstagInfo(2);
       } while ( u8g2.nextPage() );
       u8g2.setPowerSave(1); // disable charge pump
 
-      // if (DCFtime != 0) {
-      //   Serial.println("Time is updated");
-      //   setTime(DCFtime);
-      //   time_is_present = 1;
-      // }
       next_update = millis() + 3 * 1000;
-
     }
 
   }

@@ -1,9 +1,14 @@
+*~
+
 .pioenvs
 .piolibdeps
 .clang_complete
 .gcc-flags.json
 
 tests/date_test
+src/config.h
+src/Images/header.xbm
+src/Images/header_ccw.xbm
 .DS_Store
 hochzeitsuhr.sublime-project
 hochzeitsuhr.sublime-workspace

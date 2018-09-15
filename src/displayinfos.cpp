@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
+#include <Time.h>
+
+#include "config.h"
 
 #include "schnapszahlen.h"
 #include "datecalculations.h"
@@ -7,11 +10,9 @@
 #include "displayinfos.h"
 #include "dateinfo.h"
 
-#include "Time.h"
-
-#include "Images/caro_und_sven.xbm" // 250x34
-#include "Images/caro_und_sven_ccw.xbm" // 45x128
-#include "Images/GPS.xbm" // 110x110
+#include "Images/header.xbm"
+#include "Images/header_ccw.xbm"
+#include "Images/GPS.xbm"
 
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D2, /* dc=*/ D1, /* reset=*/ D3);
 
@@ -62,20 +63,18 @@ u8g2_uint_t get_x_for_centered_text(char *text, const uint8_t *font) {
   return (display_width / 2) - (text_width / 2);
 }
 
-void drawHeaderLarge() {
-  char text[] = "Verheiratet seit";
-  const uint8_t *font = u8g2_font_helvR12_tf;
-
-  // graphic commands to redraw the complete screen should be placed here
-  u8g2.drawXBMP(23, 0, caro_und_sven_width, caro_und_sven_height, caro_und_sven_bits);
+void drawStrCentered(char *text, int y, const uint8_t *font) {
   u8g2.setFont(font);
+  u8g2.drawStr(get_x_for_centered_text(text, font), y, text);
+}
 
-  u8g2.drawStr(get_x_for_centered_text(text, font), 54, text);
+void drawHeaderLarge() {
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(23, 0, header_width, header_height, header_bits);
 }
 
 void drawHeaderccw() {
-  u8g2.drawXBMP(0, 0, caro_und_sven_ccw_width, caro_und_sven_ccw_height, caro_und_sven_ccw_bits);
-
+  u8g2.drawXBMP(0, 0, header_ccw_width, header_ccw_height, header_ccw_bits);
 }
 
 void drawObtainingTime() {
@@ -94,77 +93,92 @@ void drawObtainingTime() {
 }
 
 void drawVerheiratetSeit(struct periode result) {
-      printf("%i Jahre, %i Monate, %i Tage, %i Monate gesamt, %i Tage gesamt, %i Stunden\n", result.jahre, result.monate, result.tage, result.monate_gesamt, result.tage_gesamt, result.stunden);
-      char text[40] = "";
-      char jahre_text[6]; // "Jahre" + \0
-      char monate_text[7];
-      char tage_text[5];
-      char stunden_text[8];
+  char header[] = "Verheiratet seit";
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  const uint8_t *font2 = u8g2_font_helvR08_tf;
 
-      const uint8_t *font = u8g2_font_helvR12_tf;
-      u8g2.setFont(font);
 
-      if (result.jahre > 0) {
-        mehrzahl(jahre_text, result.jahre, clckst[CLOCK_STRING_YEAR_SINGLULAR], clckst[CLOCK_STRING_YEAR_PLURAL]);
-        strcat(text, jahre_text);
+  drawStrCentered(header, 54, font);
 
-        if (result.monate > 0) {
-          strcat(text, ", ");
-          mehrzahl(monate_text, result.monate, clckst[CLOCK_STRING_MONTH_SINGLULAR], clckst[CLOCK_STRING_MONTH_PLURAL]);
-          strcat(text, monate_text);
-        }
+  printf("%i Jahre, %i Monate, %i Tage, %i Monate gesamt, %i Tage gesamt, %i Stunden\n", result.jahre, result.monate, result.tage, result.monate_gesamt, result.tage_gesamt, result.stunden);
+  char text[40] = "";
+  char jahre_text[6]; // "Jahre" + \0
+  char monate_text[7];
+  char tage_text[5];
+  char stunden_text[8];
 
-        if (result.tage > 0) {
-          strcat(text, ", ");
-          mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
-          strcat(text, tage_text);
-        }
-      } else if (result.monate > 0) {
-        mehrzahl(monate_text, result.monate, clckst[CLOCK_STRING_MONTH_SINGLULAR], clckst[CLOCK_STRING_MONTH_PLURAL]);
-        strcat(text,monate_text);
+  if (result.jahre > 0) {
+    mehrzahl(jahre_text, result.jahre, clckst[CLOCK_STRING_YEAR_SINGLULAR], clckst[CLOCK_STRING_YEAR_PLURAL]);
+    strcat(text, jahre_text);
 
-        if (result.tage > 0) {
-          strcat(text, ", ");
-          mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
-          strcat(text, tage_text);
-        }
+    if (result.monate > 0) {
+      strcat(text, ", ");
+      mehrzahl(monate_text, result.monate, clckst[CLOCK_STRING_MONTH_SINGLULAR], clckst[CLOCK_STRING_MONTH_PLURAL]);
+      strcat(text, monate_text);
+    }
 
-        if (result.stunden > 0) {
-          strcat(text, ", ");
-          mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
-          strcat(text, stunden_text);
-        }
+    if (result.tage > 0) {
+      strcat(text, ", ");
+      mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
+      strcat(text, tage_text);
+    }
+  } else if (result.monate > 0) {
+    mehrzahl(monate_text, result.monate, clckst[CLOCK_STRING_MONTH_SINGLULAR], clckst[CLOCK_STRING_MONTH_PLURAL]);
+    strcat(text,monate_text);
 
-      } else if (result.tage > 0) {
-        mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
-        strcat(text, tage_text);
+    if (result.tage > 0) {
+      strcat(text, ", ");
+      mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
+      strcat(text, tage_text);
+    }
 
-        if (result.stunden > 0) {
-          strcat(text, ", ");
-          mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
-          strcat(text, stunden_text);
-        }
+    if (result.stunden > 0) {
+      strcat(text, ", ");
+      mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
+      strcat(text, stunden_text);
+    }
 
-      } else {
-        mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
-        strcat(text, stunden_text);
-      }
+  } else if (result.tage > 0) {
+    mehrzahl(tage_text, result.tage, clckst[CLOCK_STRING_DAY_SINGLULAR], clckst[CLOCK_STRING_DAY_PLURAL]);
+    strcat(text, tage_text);
 
-      u8g2.drawStr(get_x_for_centered_text(text, font), 73, text);
-      char zusatztext[80] = "";
-      sprintf(zusatztext,"Stunden: %i, Tage: %i, Monate: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
-      const uint8_t *font2 = u8g2_font_helvR08_tf;
-      u8g2.setFont(font2);
-      u8g2.drawStr(get_x_for_centered_text(zusatztext, font2), 90, zusatztext);
-//      char uhrzeit[40] = "";
-//      sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
-//      u8g2.drawStr(get_x_for_centered_text(uhrzeit, font2), 120, uhrzeit);
-      Serial.printf("Ausgabe : %s\n", text);
-      Serial.printf("Zusatz: Stunden gesamt: %i, Tage gesamt: %i, Monate gesamt: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
+    if (result.stunden > 0) {
+      strcat(text, ", ");
+      mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
+      strcat(text, stunden_text);
+    }
+
+  } else {
+    mehrzahl(stunden_text, result.stunden, clckst[CLOCK_STRING_HOUR_SINGULAR], clckst[CLOCK_STRING_HOUR_PLURAL]);
+    strcat(text, stunden_text);
+  }
+
+  drawStrCentered(text, 80, font);
+  Serial.printf("Ausgabe : %s\n", text);
+  Serial.printf("Zusatz: Stunden gesamt: %i, Tage gesamt: %i, Monate gesamt: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
 
 }
 
 void drawSchnapszahl(struct periode result) {
+
+}
+
+void drawAdditionalInfo(struct periode result) {
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  const uint8_t *font2 = u8g2_font_helvR08_tf;
+
+  #ifdef DRAW_ADDITIONAL_ELAPSED
+  char zusatztext[80] = "";
+  sprintf(zusatztext,"Stunden: %i, Tage: %i, Monate: %i\n", result.stunden_gesamt, result.tage_gesamt, result.monate_gesamt);
+  drawStrCentered(zusatztext, 100, font2);
+  #endif
+
+  #ifdef DRAW_CURRENT_TIME
+  char uhrzeit[40] = "";
+  sprintf(uhrzeit, "%02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
+  drawStrCentered(uhrzeit, 120, font2);
+  #endif
+
 
 }
 
@@ -232,7 +246,7 @@ void drawNextWeddingDay(struct datum date, int count) {
 
   char titel[25] = "";
   if (getHochzeitstagTitel(count, titel)) {
-    u8g2.drawStr(get_x_for_centered_text(titel, font), 125, titel);    
+    u8g2.drawStr(get_x_for_centered_text(titel, font), 125, titel);
   }
 }
 
@@ -242,6 +256,7 @@ void screenVerheiratetSeit(struct periode elapsed) {
   do {
     drawHeaderLarge();
     drawVerheiratetSeit(elapsed);
+    drawAdditionalInfo(elapsed);
   } while ( u8g2.nextPage() );
   u8g2.setPowerSave(1);	// disable charge pump
 }
@@ -266,4 +281,22 @@ void screenUpcomingWeddingDay(struct periode elapsed, struct datum next_wedding_
   } while ( u8g2.nextPage() );
   u8g2.setPowerSave(1);	// disable charge pump
 
+}
+
+void screenSchnapszahl(struct periode elapsed, char *text, char *description) {
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  const uint8_t *font2 = u8g2_font_helvR08_tf;
+
+  u8g2.firstPage();
+  u8g2.setPowerSave(0);	// before drawing, enable charge pump (req. 300ms)
+  do {
+
+    drawHeaderLarge();
+    drawVerheiratetSeit(elapsed);
+
+    drawStrCentered(text, 105, font);
+    drawStrCentered(description, 125, font2);
+
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1);	// disable charge pump
 }
