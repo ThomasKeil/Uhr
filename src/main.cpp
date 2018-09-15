@@ -9,7 +9,7 @@
 //#include "WifiConfig.h"
 
 
-#define WIFI false
+#define WIFI true
 #define YOUR_WIFI_SSID ""
 #define YOUR_WIFI_PASSWD ""
 #define NTPSERVER "pool.ntp.org"
@@ -128,7 +128,7 @@ void setup(void) {
   ESPserial.begin(9600);
   u8g2.begin();
 
-  hochzeitstag = { 15, 9, 2012, 10};
+  hochzeitstag = { 15, 9, 2012, 11};
 #if WIFI
       WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
@@ -239,7 +239,6 @@ void loop(void) {
       struct datum today = getNow();
       struct datum next = getNextWeddingDayDate();
       Serial.printf("Next: %i.%i.%i\n", next.tag, next.monat, next.jahr);
-
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
       struct periode to_come = calculatePeriode(today, next);
 
@@ -248,10 +247,6 @@ void loop(void) {
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
         int count = today.jahr - hochzeitstag.jahr;
-        Serial.printf("today %i - hochzeitstag %i\n",today.jahr,hochzeitstag.jahr);
-        Serial.print("count = ");
-        Serial.println(count);
-//        int count = 2;
         Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
         screenHochzeitstaginfo(count);
       }
