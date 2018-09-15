@@ -4,3 +4,6 @@
 .gcc-flags.json
 
 tests/date_test
+.DS_Store
+hochzeitsuhr.sublime-project
+hochzeitsuhr.sublime-workspace
