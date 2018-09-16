@@ -13,7 +13,7 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
     // Error. How?
   }
 
-  if (datum1.jahr == datum1.jahr) {
+  if (datum1.jahr == datum2.jahr) {
     if (datum2.monat < datum1.monat) {
       // Error
     }
@@ -24,7 +24,7 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
       }
       if ( datum1.tag == datum2.tag) {
         if (datum2.stunde < datum1.stunde) {
-          // error
+          datum2.jahr++;
         }
       }
     }
@@ -139,7 +139,6 @@ struct datum getNextWeddingDayDate() {
   if (tagesnummer_now >= tagesnummer_hochzeitstag) {
     next.jahr++;
   }
-
   return next;
 }
 
