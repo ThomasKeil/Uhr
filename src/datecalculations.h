@@ -6,7 +6,7 @@ struct datum {
 };
 
 struct periode {
-  int stunden, tage, monate, jahre, monate_gesamt, tage_gesamt, stunden_gesamt;
+  int stunden, tage, monate, jahre, monate_gesamt, tage_gesamt, stunden_gesamt, valid;
 };
 
 struct periode calculatePeriode(struct datum datum1, struct datum datum2);

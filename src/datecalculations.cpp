@@ -9,29 +9,6 @@ extern struct datum hochzeitstag;
 // Siehe: http://latest-technology-guide.blogspot.com/2013/03/c-language-example-36-find-date.html
 
 struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
-  if (datum2.jahr < datum1.jahr) {
-    // Error. How?
-  }
-
-  if (datum1.jahr == datum1.jahr) {
-    if (datum2.monat < datum1.monat) {
-      // Error
-    }
-    if (datum1.monat == datum2.monat) {
-      if (datum2.tag < datum1.tag) {
-        // error
-
-      }
-      if ( datum1.tag == datum2.tag) {
-        if (datum2.stunde < datum1.stunde) {
-          // error
-        }
-      }
-    }
-  }
-
-  int days_in_month[]={31,28,31,30,31,30,31,31,30,31,30,31};
-
   struct periode result;
   result.stunden = 0;
   result.tage = 0;
@@ -40,6 +17,34 @@ struct periode calculatePeriode(struct datum datum1, struct datum datum2) {
   result.tage_gesamt = 0;
   result.monate_gesamt = 0;
   result.stunden_gesamt = 0;
+  result.valid = 1;
+
+  if (datum2.jahr < datum1.jahr) {
+    result.valid = 0;
+    return result;
+  }
+
+  if (datum1.jahr == datum2.jahr) {
+    if (datum2.monat < datum1.monat) {
+      result.valid = 0;
+      return result;
+    }
+    if (datum1.monat == datum2.monat) {
+      if (datum2.tag < datum1.tag) {
+        result.valid = 0;
+        return result;
+      }
+      if ( datum1.tag == datum2.tag) {
+        if (datum2.stunde < datum1.stunde) {
+          result.valid = 0;
+          return result;
+        }
+      }
+    }
+  }
+
+  int days_in_month[]={31,28,31,30,31,30,31,31,30,31,30,31};
+
 
   // Hier starten wir.
   struct datum cursor = datum1;

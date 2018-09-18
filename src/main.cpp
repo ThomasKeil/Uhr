@@ -206,8 +206,7 @@ void loop(void) {
     gps.encode(ESPserial.read());
   }
 
-  if (seconds != gps.time.second()) {
-    // TODO: get fix
+  if (seconds != gps.time.second() && gps.time.isValid() && gps.date.isValid()) {
     seconds = gps.time.second();
     // Serial.print("LAT=");  Serial.println(gps.location.lat(), 6);
     // Serial.print("LONG="); Serial.println(gps.location.lng(), 6);
@@ -236,8 +235,20 @@ void loop(void) {
       Serial.printf("Berechne Vergangenes\n");
       struct periode elapsed = calculatePeriode(hochzeitstag, today);
 
+      if (!elapsed.valid) {
+        Serial.printf("ERROR: elapsed not valid.\n");
+        next_update += REFRESH_OBTAINING_INFO;
+        return;
+      }
+
       Serial.printf("Berechne kommenden Hochzeitstag.\n");
       struct periode to_come = calculatePeriode(today, next);
+      if (!to_come.valid) {
+        Serial.printf("ERROR: to_come not valid.\n");
+        next_update += REFRESH_OBTAINING_INFO;
+        return;
+      }
+
 
       char description[40];
       char text[40];
@@ -283,7 +294,7 @@ void loop(void) {
       {
         screenVerheiratetSeit(elapsed);
       }
-      next_update = millis() + 60 * 10 * 1000 ;
+      next_update += REFRESH_REGULAR;
     } else {
       u8g2.firstPage();
       u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
@@ -292,7 +303,7 @@ void loop(void) {
       } while ( u8g2.nextPage() );
       u8g2.setPowerSave(1); // disable charge pump
 
-      next_update = millis() + 3 * 1000;
+      next_update += REFRESH_OBTAINING_INFO;
     }
 
   }
