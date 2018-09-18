@@ -103,6 +103,17 @@ void drawIPAddress(char *ip) {
   u8g2.drawStr(140, 84, ip);
 }
 
+void drawAbout() {
+  char text[] = "Coded by";
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
+  u8g2.setFont(font);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, 54, text);
+  sprintf(text,"Thomas Keil");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, 75, text);
+}
+
 void drawCaptivePortal(char *apname, char *ip) {
   char text[90];
   const uint8_t *font = u8g2_font_helvR10_tf;
@@ -288,7 +299,20 @@ void screenIPAddress(char *ip) {
   } while ( u8g2.nextPage() );
   u8g2.setPowerSave(1); // disable charge pump  
 
-  delay(30);
+  delay(1300);
+
+  next_update = 0;
+} 
+
+void screenAbout() {
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawAbout();
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump  
+
+  delay(1300);
 
   next_update = 0;
 } 

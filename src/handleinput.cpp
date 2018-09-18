@@ -116,6 +116,10 @@ void handleInput_auswertung(char input[]) {
     screenVerheiratetSeit(elapsed);
   }
 
+  if ( !strncmp(input, "about", 6) ) {
+    screenAbout();
+  }
+
   if ( !strncmp(input, "hello", 5) ) {
     Serial.println("hi");
   }
