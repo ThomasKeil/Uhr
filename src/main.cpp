@@ -8,7 +8,7 @@
 #include "Time.h"
 #include "config.h"
 
-#define NTPSERVER "pool.ntp.org"
+#define NTPSERVER "ptbtime2.ptb.de"
 
 // ernie wlan/ntp
 #if WIFI
@@ -119,6 +119,14 @@ const char *clckst[] {
       }
   }
 
+  void configModeCallbackWifiManager (WiFiManager *myWiFiManager) {
+    char apname[40];
+    myWiFiManager->getConfigPortalSSID().toCharArray(apname,myWiFiManager->getConfigPortalSSID().length()+1); 
+    char ip[20];
+    WiFi.softAPIP().toString().toCharArray(ip,WiFi.softAPIP().toString().length()+1);
+    screenCaptivePortal(apname,ip);
+  }
+
   boolean syncEventTriggered = false; // True if a time even has been triggered
   NTPSyncEvent_t ntpEvent; // Last triggered event
 #endif // wifi ende
@@ -130,11 +138,10 @@ void setup(void) {
 
   hochzeitstag = HOCHZEITSTAG;
 #if WIFI
-//      WiFiManager wifiManager;
-      WiFi.mode (WIFI_STA);
-      wifiManager.setTimeout(15);
+//      WiFi.mode (WIFI_STA);
+      wifiManager.setAPCallback(configModeCallbackWifiManager);
+//      wifiManager.setTimeout(15);
       wifiManager.autoConnect("Hochzeitsuhr");
-//      wifiManager.resetSettings();
       static WiFiEventHandler e1, e2, e3;
       Serial.println("Local IP");
       Serial.println(WiFi.localIP());

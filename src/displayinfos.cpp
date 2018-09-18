@@ -13,6 +13,7 @@
 #include "Images/header.xbm"
 #include "Images/header_ccw.xbm"
 #include "Images/GPS.xbm"
+#include "Images/WLAN.xbm"
 
 extern unsigned int next_update;
 
@@ -93,14 +94,34 @@ void drawObtainingTime() {
 }
 
 void drawIPAddress(char *ip) {
-
   char text[] = "IP Address: ";
   const uint8_t *font = u8g2_font_helvR12_tf;
   // graphic commands to redraw the complete screen should be placed here
-  u8g2.drawXBMP(14, 14, GPS_width, GPS_height, GPS_bits);
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
   u8g2.setFont(font);
   u8g2.drawStr(140, 54, text);
   u8g2.drawStr(140, 84, ip);
+}
+
+void drawCaptivePortal(char *apname, char *ip) {
+  char text[90];
+  const uint8_t *font = u8g2_font_helvR10_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
+  u8g2.setFont(font);
+  int zeile = 35;
+  sprintf(text,"Bitte mit dem WLAN");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile, text);
+  sprintf(text,"\"%s\"",apname);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+15, text);
+  sprintf(text,"verbinden.");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+30, text);
+  sprintf(text,"Und im Browser");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+45, text);
+  sprintf(text,"http://%s",ip);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+60, text);
+  sprintf(text,"aufrufen.");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+75, text);
 }
 
 void drawVerheiratetSeit(struct periode result) {
@@ -269,10 +290,20 @@ void screenIPAddress(char *ip) {
 
   delay(30);
 
-//  struct datum today = getNow();
-//  struct periode elapsed = calculatePeriode(hochzeitstag, today);
-//  screenVerheiratetSeit(elapsed);
-    next_update = 0;
+  next_update = 0;
+} 
+
+void screenCaptivePortal(char *apname, char *ip) {
+  Serial.print("apname = ");
+  Serial.println(apname);
+  Serial.print("ip = ");
+  Serial.println(ip);
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawCaptivePortal(apname,ip);
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump  
 } 
 
 void screenVerheiratetSeit(struct periode elapsed) {
