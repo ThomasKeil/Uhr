@@ -8,6 +8,7 @@
 extern struct datum hochzeitstag;
 extern unsigned int next_update;
 
+
 void printCurrentTime() {
   char current_time[40];
   sprintf(current_time, "Bekannte Zeit: %02i.%02i.%04i %02i:%02i:%02i", day(), month(), year(), hour(), minute(), second());
@@ -78,6 +79,7 @@ void handleInput_auswertung(char input[]) {
     Serial.println("ht X: Display info about Hochzeitstag 0-25" );
     if (wifi_wlan) {
       Serial.println("ip: Anzeige der IP-Addresse" );
+      Serial.println("resetwlan: Wlansettings löschen" );
     }
     Serial.println();
   }
@@ -85,7 +87,15 @@ void handleInput_auswertung(char input[]) {
   if ( !strncmp(input, "ip", 3) ) {
     Serial.print("ip = ");
     Serial.println(wifiip);
+    screenIPAddress(wifiip);
   }
+
+  if ( !strncmp(input, "resetwlan", 9) ) {
+    Serial.print("wlansettings werden gelöscht");
+    wlanreset = true;
+    next_update = 0;
+  }
+
 
   if ( !strncmp(input, "currenttime", 11) ) {
     printCurrentTime();

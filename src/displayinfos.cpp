@@ -14,6 +14,8 @@
 #include "Images/header_ccw.xbm"
 #include "Images/GPS.xbm"
 
+extern unsigned int next_update;
+
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D2, /* dc=*/ D1, /* reset=*/ D3);
 
 extern struct datum hochzeitstag;
@@ -88,14 +90,22 @@ void drawObtainingTime() {
 
   sprintf(text, "%02i:%02i:%02i", hour(), minute(), second());
   u8g2.drawStr(140, 84, text);
+}
 
+void drawIPAddress(char *ip) {
 
+  char text[] = "IP Address: ";
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, GPS_width, GPS_height, GPS_bits);
+  u8g2.setFont(font);
+  u8g2.drawStr(140, 54, text);
+  u8g2.drawStr(140, 84, ip);
 }
 
 void drawVerheiratetSeit(struct periode result) {
   char header[] = "Verheiratet seit";
   const uint8_t *font = u8g2_font_helvR12_tf;
-  const uint8_t *font2 = u8g2_font_helvR08_tf;
 
 
   drawStrCentered(header, 54, font);
@@ -164,7 +174,6 @@ void drawSchnapszahl(struct periode result) {
 }
 
 void drawAdditionalInfo(struct periode result) {
-  const uint8_t *font = u8g2_font_helvR12_tf;
   const uint8_t *font2 = u8g2_font_helvR08_tf;
 
   #ifdef DRAW_ADDITIONAL_ELAPSED
@@ -249,6 +258,22 @@ void drawNextWeddingDay(struct datum date, int count) {
     u8g2.drawStr(get_x_for_centered_text(titel, font), 125, titel);
   }
 }
+
+void screenIPAddress(char *ip) {
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawIPAddress(ip);
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump  
+
+  delay(30);
+
+//  struct datum today = getNow();
+//  struct periode elapsed = calculatePeriode(hochzeitstag, today);
+//  screenVerheiratetSeit(elapsed);
+    next_update = 0;
+} 
 
 void screenVerheiratetSeit(struct periode elapsed) {
   u8g2.firstPage();

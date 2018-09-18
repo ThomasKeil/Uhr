@@ -8,16 +8,12 @@
 #include "Time.h"
 #include "config.h"
 
-#ifndef WIFI_CONFIG_H
-  #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
-  #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
-#endif // !WIFI_CONFIG_H
-
 #define NTPSERVER "pool.ntp.org"
 
 // ernie wlan/ntp
 #if WIFI
   bool wifi_wlan = true;
+  bool wlanreset = false;
   #include <TimeLib.h>
   #include <NtpClientLib.h>
   #include <ESP8266WiFi.h>
@@ -29,12 +25,14 @@
 
   #define ONBOARDLED 2 // Built in LED on ESP-12/ESP-07
 
+  WiFiManager wifiManager;
+
   int8_t timeZone = 1;
   int8_t minutesTimeZone = 0;
   bool wifiFirstConnected = false;
-
-  ESP8266WebServer server(80);
-
+  #if WEBSERVER
+    ESP8266WebServer server(80);
+  #endif
 #else
   bool wifi_wlan = false;
 #endif
@@ -46,11 +44,11 @@
 
 time_t time;
 unsigned int next_update = 0;
-extern int time_is_present = 0;
+int time_is_present = 0;
 
 struct datum hochzeitstag;
 
-extern char wifiip[16] = "keine ip";
+char wifiip[16] = "keine ip";
 int seconds = 0;
 
 
@@ -69,6 +67,7 @@ const char *clckst[] {
 };
 
 #if WIFI
+  #if WEBSERVER
    void handleRoot() {
       server.send(200, "text/html", "<h2>Hochzeitsuhr</h2><br><a href=\"/action?ip=1\">ip anzeigen</a><br>\
         <a href=\"action?cleardisplay=1\">Display l&ouml;schen</a><br>\
@@ -84,6 +83,7 @@ const char *clckst[] {
         handleInput_auswertung(message);
         server.send(200, "text/plain", "hello from esp8266! argv = "+ test);
     }
+  #endif
 
   void onSTAConnected (WiFiEventStationModeConnected ipInfo) {
       Serial.printf ("Connected to %s\r\n", ipInfo.ssid.c_str ());
@@ -130,7 +130,7 @@ void setup(void) {
 
   hochzeitstag = HOCHZEITSTAG;
 #if WIFI
-      WiFiManager wifiManager;
+//      WiFiManager wifiManager;
       WiFi.mode (WIFI_STA);
       wifiManager.setTimeout(15);
       wifiManager.autoConnect("Hochzeitsuhr");
@@ -140,8 +140,8 @@ void setup(void) {
       Serial.println(WiFi.localIP());
       IPAddress ip = WiFi.localIP();
       sprintf(wifiip, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
-      Serial.println ();
-//      WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
+
+      screenIPAddress(wifiip);
 
       pinMode (ONBOARDLED, OUTPUT); // Onboard LED
       digitalWrite (ONBOARDLED, LOW); // Switch on LED
@@ -153,12 +153,12 @@ void setup(void) {
         Serial.println("MDNS responder started");
        }
 
-
+ #if WEBSERVER
       server.on("/action", handleAction);
       server.on("/", handleRoot);
 
       server.begin();
-
+ #endif
 
       NTP.onNTPSyncEvent ([](NTPSyncEvent_t event) {
           ntpEvent = event;
@@ -186,8 +186,11 @@ void loop(void) {
         processSyncEvent (ntpEvent);
         syncEventTriggered = false;
     }
-      server.handleClient();
 
+
+    #if WEBSERVER
+      server.handleClient();
+    #endif
 /*
     static int i = 0;
     static int last = 0;
@@ -206,7 +209,6 @@ void loop(void) {
         i++;
     }
 */
-    delay (0);
 #else // wifi ende
   // time_t DCFtime = DCF.getTime(); // Check if new DCF77 time is available
 
@@ -234,6 +236,17 @@ void loop(void) {
 #endif // else ende von wifi
 
   if (millis() > next_update) {
+#if WIFI
+    if (wlanreset) {
+//      WiFi.disconnect(true);
+      wifiManager.resetSettings();
+      Serial.println("wlan gelöscht mache ein reset !!!");
+      delay(1000);
+      ESP.restart();
+      delay(1000);
+      Serial.println("Reset");
+    }
+#endif
     if (time_is_present) {
       struct datum today = getNow();
       struct datum next = getNextWeddingDayDate();
