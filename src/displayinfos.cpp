@@ -14,7 +14,8 @@
 #include "Images/header_ccw.xbm"
 #include "Images/GPS.xbm"
 
-U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
+// U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
+U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, DISPLAY_PIN_CLOCK, DISPLAY_PIN_DATA, DISPLAY_PIN_CS, DISPLAY_PIN_DC, DISPLAY_PIN_RESET);
 
 extern struct datum hochzeitstag;
 

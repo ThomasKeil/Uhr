@@ -54,7 +54,7 @@ extern char wifiip[16] = "keine ip";
 int seconds = 0;
 
 
-SoftwareSerial ESPserial(D6, D1); // RX | TX
+SoftwareSerial ESPserial(GPS_PIN_RX, GPS_PIN_TX); // RX | TX
 TinyGPSPlus gps;
 
 const char *clckst[] {
@@ -255,8 +255,10 @@ void loop(void) {
 
       if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
-        Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
-        screenHochzeitstaginfo(count);
+        if (count > 0) {
+          Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
+          screenHochzeitstaginfo(count);
+        }
       }
       else if(isSpecial(elapsed.stunden_gesamt, 3, 1, description))  // Ist eine Stunden "Schnapszahl" für vergangene Zeit?
       {
