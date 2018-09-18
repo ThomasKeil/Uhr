@@ -11,13 +11,12 @@ function convert($input) {
 
 }
 
-$past_dates = [
-  "standesamtlich" => "02.02.2018 21:00",
-  "kirchlich" => "22.09.2018 15:00"
-];
-
-
 $periods = [
+  [
+    "period" => 0,
+    "name" => "Hochzeitstag",
+    "text" => "Jedes Jahr am Tag der Hochzeit feiert das Ehepaar folglich seinen Hochzeitstag. Für viele Paare hat dieser Jahrestag jedenfalls eine große Bedeutung! Schließlich feiert man an diesem Tag, dass man immer noch glücklich zusammen ist."
+    ],
   [
     "period" => 1,
     "name" => "Die Papierhochzeit",
@@ -209,30 +208,12 @@ struct hochzeitstag {
 };
 
 <?php
-foreach (array_keys($past_dates) as $key => $name) {
-  print "#define ".strtoupper($name)." ${key}\n";
-}
 print "#define hochzeitstage_count ".sizeof($periods)."\n";
 print "const char *dates[".sizeof($past_dates)."][".sizeof($periods)."];\n";
-
-foreach ($past_dates as $index_past_date => $past_date) {
-    $date = new DateTime($past_date);
-    foreach ($periods as $index_period => $info) {
-        $day = clone $date;
-        $day->add(new DateInterval("P".$info["period"]."Y".(isset($info["month"]) ? $info["month"]."M" : "")));
-//        print "dates[".strtoupper($index_past_date)."][".$index_period."] = ".$day->format("U")."\n";
-        // print "hochzeitstage[".strtoupper($index_past_date)."][".$index_period."] =
-//    $date->format("c U")."   ".$day->format("c")."\n";
-    }
-}
-
 print "struct hochzeitstag hochzeitstage[".sizeof($periods)."] = {\n";
 
 
 foreach ($periods as $index_period => $info) {
-  // print "hochzeitstage[".$index_period."].period  = ".$info["period"].";\n";
-  // print "hochzeitstage[".$index_period."].name  = \"".$info["name"]."\";\n";
-  // print "hochzeitstage[".$index_period."].text  = \"".preg_replace("/\n/m", '\n', $info["text"])."\";\n";
   print "  {".$info["period"].", \"".convert($info["name"])."\", \"".preg_replace("/\n/m", '\n', convert($info["text"]))."\"},\n";
 }
 print "};\n";
