@@ -13,6 +13,7 @@
 #include "Images/header.xbm"
 #include "Images/header_ccw.xbm"
 #include "Images/GPS.xbm"
+#include "Images/WLAN.xbm"
 
 // U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ D5, /* data=*/ D7, /* cs=*/ D8, /* dc=*/ D2, /* reset=*/ D3);
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, DISPLAY_PIN_CLOCK, DISPLAY_PIN_DATA, DISPLAY_PIN_CS, DISPLAY_PIN_DC, DISPLAY_PIN_RESET);
@@ -89,14 +90,53 @@ void drawObtainingTime() {
 
   sprintf(text, "%02i:%02i:%02i", hour(), minute(), second());
   u8g2.drawStr(140, 84, text);
+}
 
+void drawIPAddress(char *ip) {
+  char text[] = "IP Address: ";
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
+  u8g2.setFont(font);
+  u8g2.drawStr(140, 54, text);
+  u8g2.drawStr(140, 84, ip);
+}
 
+void drawAbout() {
+  char text[] = "Coded by";
+  const uint8_t *font = u8g2_font_helvR12_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
+  u8g2.setFont(font);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, 54, text);
+  sprintf(text,"Thomas Keil");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, 75, text);
+}
+
+void drawCaptivePortal(char *apname, char *ip) {
+  char text[90];
+  const uint8_t *font = u8g2_font_helvR10_tf;
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.drawXBMP(14, 14, WLAN_width, WLAN_height, WLAN_bits);
+  u8g2.setFont(font);
+  int zeile = 35;
+  sprintf(text,"Bitte mit dem WLAN");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile, text);
+  sprintf(text,"\"%s\"",apname);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+15, text);
+  sprintf(text,"verbinden.");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+30, text);
+  sprintf(text,"Und im Browser");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+45, text);
+  sprintf(text,"http://%s",ip);
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+60, text);
+  sprintf(text,"aufrufen.");
+  u8g2.drawStr(get_x_for_centered_text(text,font)+50, zeile+75, text);
 }
 
 void drawVerheiratetSeit(struct periode result) {
   char header[] = "Verheiratet seit";
   const uint8_t *font = u8g2_font_helvR12_tf;
-  const uint8_t *font2 = u8g2_font_helvR08_tf;
 
 
   drawStrCentered(header, 54, font);
@@ -165,7 +205,6 @@ void drawSchnapszahl(struct periode result) {
 }
 
 void drawAdditionalInfo(struct periode result) {
-  const uint8_t *font = u8g2_font_helvR12_tf;
   const uint8_t *font2 = u8g2_font_helvR08_tf;
 
   #ifdef DRAW_ADDITIONAL_ELAPSED
@@ -194,7 +233,9 @@ void drawHochzeitstagInfo(int tag_index) {
 
   const uint8_t *large_font = u8g2_font_9x18B_tf;
   u8g2.setFont(large_font);
-  u8g2.drawStr(55, 10, hochzeitstage[day_to_display].name);
+  char ueberschrift[50];
+  sprintf(ueberschrift,"%i. %s",hochzeitstage[day_to_display].period, hochzeitstage[day_to_display].name);
+  u8g2.drawStr(55, 10, ueberschrift);
 
 
   const uint8_t *font = u8g2_font_lucasfont_alternate_tf;
@@ -235,12 +276,51 @@ void drawNextWeddingDay(struct datum date, int count) {
 
   char text[40] = "";
   sprintf(text, "Am %02i.%02i.%i ist der %i. Hochzeitstag", date.tag, date.monat, date.jahr, count);
-  u8g2.drawStr(get_x_for_centered_text(text, font), 105, text);
+  u8g2.drawStr(get_x_for_centered_text(text, font), 108, text);
 
   char titel[25] = "";
   if (getHochzeitstagTitel(count, titel)) {
     u8g2.drawStr(get_x_for_centered_text(titel, font), 125, titel);
   }
+}
+
+void screenIPAddress(char *ip) {
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawIPAddress(ip);
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump
+
+  delay(1300);
+
+  next_update = 0;
+}
+
+void screenAbout() {
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawAbout();
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump
+
+  delay(1300);
+
+  next_update = 0;
+}
+
+void screenCaptivePortal(char *apname, char *ip) {
+  Serial.print("apname = ");
+  Serial.println(apname);
+  Serial.print("ip = ");
+  Serial.println(ip);
+  u8g2.firstPage();
+  u8g2.setPowerSave(0); // before drawing, enable charge pump (req. 300ms)
+  do {
+    drawCaptivePortal(apname,ip);
+  } while ( u8g2.nextPage() );
+  u8g2.setPowerSave(1); // disable charge pump
 }
 
 void screenVerheiratetSeit(struct periode elapsed) {
