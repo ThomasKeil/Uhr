@@ -118,6 +118,19 @@ const char *clckst[] {
   NTPSyncEvent_t ntpEvent; // Last triggered event
 #endif // wifi ende
 
+// Send a byte array of UBX protocol to the GPS
+void sendUBX(uint8_t *MSG, uint8_t len) {
+  for(int i=0; i<len; i++) {
+    ESPserial.write(MSG[i]);
+  }
+}
+
+void setupGPSpower() {
+  //Set GPS ot Power Save Mode
+  uint8_t setPSM[] = { 0xB5, 0x62, 0x06, 0x11, 0x02, 0x00, 0x08, 0x01, 0x22, 0x92 }; // Setup for Power Save Mode (Default Cyclic 1s)
+  sendUBX(setPSM, sizeof(setPSM)/sizeof(uint8_t));
+}
+
 void setup(void) {
   Serial.begin(9600);
   ESPserial.begin(9600);
@@ -220,6 +233,7 @@ void loop(void) {
     if (!time_is_present && seconds > 0) {
       time_is_present = 1;
       setTime(gps.time.hour() + 2, gps.time.minute(),gps.time.second(),gps.date.day(),gps.date.month(),gps.date.year());
+      setupGPSpower(); // Lower power consumption
     }
   }
 #endif // else ende von wifi
