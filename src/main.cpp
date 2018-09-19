@@ -43,7 +43,7 @@
 #include "handleinput.h"
 
 time_t time;
-unsigned int next_update = 0;
+unsigned int next_update = millis();
 int time_is_present = 0;
 
 struct datum hochzeitstag;
@@ -280,6 +280,7 @@ void loop(void) {
       if (!elapsed.valid) {
         Serial.printf("ERROR: elapsed not valid.\n");
         next_update += REFRESH_OBTAINING_INFO;
+        time_is_present = 0;
         return;
       }
 

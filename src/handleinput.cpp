@@ -90,12 +90,13 @@ void handleInput_auswertung(char input[]) {
     screenIPAddress(wifiip);
   }
 
+  #if WIFI
   if ( !strncmp(input, "resetwlan", 9) ) {
     Serial.print("wlansettings werden gelöscht");
     wlanreset = true;
     next_update = 0;
   }
-
+  #endif
 
   if ( !strncmp(input, "currenttime", 11) ) {
     printCurrentTime();

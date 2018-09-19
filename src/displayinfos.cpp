@@ -19,6 +19,8 @@
 U8G2_IL3820_V2_296X128_F_4W_SW_SPI u8g2(U8G2_R0, DISPLAY_PIN_CLOCK, DISPLAY_PIN_DATA, DISPLAY_PIN_CS, DISPLAY_PIN_DC, DISPLAY_PIN_RESET);
 
 extern struct datum hochzeitstag;
+extern unsigned int next_update;
+
 
 void mehrzahl(char* result, int zahl, const char *einzahl, const char *mehrzahl) {
   switch (zahl) {
@@ -234,7 +236,11 @@ void drawHochzeitstagInfo(int tag_index) {
   const uint8_t *large_font = u8g2_font_9x18B_tf;
   u8g2.setFont(large_font);
   char ueberschrift[50];
-  sprintf(ueberschrift,"%i. %s",hochzeitstage[day_to_display].period, hochzeitstage[day_to_display].name);
+  if (day_to_display) {
+    sprintf(ueberschrift,"%i. %s",hochzeitstage[day_to_display].period, hochzeitstage[day_to_display].name);
+  } else {
+    sprintf(ueberschrift,"%i. %s",tag_index, hochzeitstage[day_to_display].name);
+  }
   u8g2.drawStr(55, 10, ueberschrift);
 
 
