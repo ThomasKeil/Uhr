@@ -140,9 +140,9 @@ struct datum getNextWeddingDayDate() {
   struct datum next = {hochzeitstag.tag, hochzeitstag.monat, now.jahr, hochzeitstag.stunde};
 
   int tagesnummer_now = getTagesnummer(now);
-  int tagesnummer_hochzeitstag = getTagesnummer(hochzeitstag);
+  int tagesnummer_next = getTagesnummer(next);
 
-  if (tagesnummer_now > tagesnummer_hochzeitstag) {
+  if (tagesnummer_now > tagesnummer_next) {
     next.jahr++;
   }
   return next;
