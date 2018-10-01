@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Time.h"
 
+#include "clockutils.h"
 #include "handleinput.h"
 #include "displayinfos.h"
 

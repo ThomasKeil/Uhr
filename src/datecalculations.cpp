@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include "Time.h"
-
 #include "datecalculations.h"
 
 extern struct datum hochzeitstag;
@@ -107,9 +104,6 @@ int daysInFebruary(int jahr) {
   if (jahr%4==0 && (jahr%100!=0 || jahr%400==0)) {
     days = 29;
   }
-  #ifdef DC_DEBUG
-  printf("Der Februar hatte im Jahr %i %i Tage.\n", jahr, days);
-  #endif
   return days;
 }
 
@@ -130,23 +124,6 @@ int isSmaller(struct datum datum1, struct datum datum2) {
   return d1 < d2;
 }
 
-struct datum getNow() {
-  struct datum now = {day(), month(), year(), hour()};
-  return now;
-}
-
-struct datum getNextWeddingDayDate() {
-  struct datum now = {day(), month(), year(), hour()};
-  struct datum next = {hochzeitstag.tag, hochzeitstag.monat, now.jahr, hochzeitstag.stunde};
-
-  int tagesnummer_now = getTagesnummer(now);
-  int tagesnummer_next = getTagesnummer(next);
-
-  if (tagesnummer_now > tagesnummer_next) {
-    next.jahr++;
-  }
-  return next;
-}
 
 int getDaysInMonth(int month, int year) {
   int february = 28;

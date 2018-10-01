@@ -37,6 +37,7 @@
   bool wifi_wlan = false;
 #endif
 
+#include "clockutils.h";
 #include "schnapszahlen.h"
 #include "datecalculations.h"
 #include "displayinfos.h"
@@ -269,7 +270,7 @@ void loop(void) {
 #endif
     if (time_is_present) {
       struct datum today = getNow();
-      struct datum next = getNextWeddingDayDate();
+      struct datum next = getNextWeddingDayDate(hochzeitstag);
       int count = next.jahr - hochzeitstag.jahr;
 
       Serial.printf("Next: %i.%i.%i, der %i.\n", next.tag, next.monat, next.jahr, count);
@@ -286,17 +287,17 @@ void loop(void) {
 
       Serial.printf("Berechne kommenden Hochzeitstag.\n");
       struct periode to_come = calculatePeriode(today, next);
-      if (!to_come.valid) {
+      /* if (!to_come.valid) {
         Serial.printf("ERROR: to_come not valid.\n");
         next_update += REFRESH_OBTAINING_INFO;
         return;
-      }
+      } */
 
-
+      Serial.printf("Berechnet.\n");
       char description[40];
       char text[40];
 
-      if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
+      if (false && day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
         if (count > 0) {
           Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);
@@ -309,14 +310,14 @@ void loop(void) {
         sprintf(text, "Verheiratet %i Stunden.", elapsed.stunden_gesamt);
         screenSchnapszahl(elapsed, text, description);
       }
-      else if(isSpecial(to_come.stunden_gesamt, 3, 1, description)) // Ist eine Stunde "Schnapszahl" für den kommenden Hochzeitstag?
+      else if(to_come.valid && isSpecial(to_come.stunden_gesamt, 3, 1, description)) // Ist eine Stunde "Schnapszahl" für den kommenden Hochzeitstag?
       {
         Serial.printf("Schnapszahl Stunden %i kommender HT wird gezeigt\n", to_come.stunden_gesamt);
         Serial.println(description);
         sprintf(text, "Hochzeitstag in %i Stunden.", to_come.stunden_gesamt);
         screenSchnapszahl(elapsed, text, description);
       }
-      else if(to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
+      else if(to_come.valid && to_come.tage_gesamt <= 7) // Ist der kommende Hochzeitstag innerhalb von 7 Tagen?
       {
         Serial.printf("Nächster Hochzeitstag: der %i.\n",count);
         if (count > 0) { // Am Tag der Hochzeit selbst zeigen wir nicht, das Hochzeitstag ist
@@ -329,7 +330,7 @@ void loop(void) {
         sprintf(text, "Verheiratet %i Tagen.", elapsed.tage_gesamt);
         screenSchnapszahl(elapsed, text, description);
       }
-      else if (isSpecial(to_come.tage_gesamt, 2, 1, description)) // haben wir eine Schnapszahl mit Tagen für den kommenden Hochzeitstag?
+      else if (to_come.valid && isSpecial(to_come.tage_gesamt, 2, 1, description)) // haben wir eine Schnapszahl mit Tagen für den kommenden Hochzeitstag?
       {
         Serial.printf("Schnapszahl Tage %i kommender HT wird gezeigt", to_come.tage_gesamt);
         sprintf(text, "Hochzeitstag in %i Tagen.", to_come.tage_gesamt);
@@ -337,6 +338,7 @@ void loop(void) {
       }
       else // Trifft alles nicht zu, daher default zeigen.
       {
+        Serial.printf("Verheitetet seit zeigen\n");
         screenVerheiratetSeit(elapsed);
       }
       next_update += REFRESH_REGULAR;

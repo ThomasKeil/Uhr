@@ -5,7 +5,7 @@
 
 
 void print_result(struct periode result) {
-  printf("%i Jahre, %i Monate, %i Tage,  %i Stunden  -   Monate gesamt: %i, Tage gesamt: %i, Stunden gesamt: %i\n", result.jahre, result.monate, result.tage, result.stunden, result.monate_gesamt, result.tage_gesamt, result.stunden_gesamt);
+  printf("Valid: %i, %i Jahre, %i Monate, %i Tage,  %i Stunden  -   Monate gesamt: %i, Tage gesamt: %i, Stunden gesamt: %i\n", result.valid ? 1 : 0, result.jahre, result.monate, result.tage, result.stunden, result.monate_gesamt, result.tage_gesamt, result.stunden_gesamt);
 }
 
 void print_datum(struct datum datum) {
@@ -52,21 +52,21 @@ int main() {
 
 
 
-  struct datum start = { 15, 9, 2012, 10};
+  struct datum start = { 21, 9, 2018, 15};
   struct datum ende;
   struct datum assert_datum;
 
   print_datum(start);
   printf("\n");
 
-  ende = (struct datum ) {16, 9, 2018, 8};
-  assert_datum = (struct datum ) {0, 0, 6, 22};
+  ende = (struct datum ) {21, 9, 2018, 18};
+  assert_datum = (struct datum ) {0, 0, 0, 3};
   test_periode(start, ende,assert_datum);
+  /*
 
   ende = (struct datum ) {14, 9, 2018, 8};
   assert_datum = (struct datum ) {0, 0, 6, 12};
   test_periode(start, ende,assert_datum);
-/*
   ende = (struct datum ) {15, 9, 2013, 15};
   test_periode(start, ende);
 
