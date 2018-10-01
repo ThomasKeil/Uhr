@@ -107,6 +107,15 @@ int daysInFebruary(int jahr) {
   return days;
 }
 
+struct datum getNextWeddingDayDate(struct datum now, struct datum hochzeitstag) {
+  struct datum next = {hochzeitstag.tag, hochzeitstag.monat, now.jahr, hochzeitstag.stunde};
+
+  if (isLarger(now, next) || isEqual(now, next)) {
+    next.jahr++;
+  }
+  return next;
+}
+
 int datumToInt(struct datum datum) {
   int result = datum.jahr * 1000000 + datum.monat * 10000 + datum.tag * 100 + datum.stunde;
   return result;
@@ -122,6 +131,12 @@ int isSmaller(struct datum datum1, struct datum datum2) {
   int d1 = datumToInt(datum1);
   int d2 = datumToInt(datum2);
   return d1 < d2;
+}
+
+int isLarger(struct datum datum1, struct datum datum2) {
+  int d1 = datumToInt(datum1);
+  int d2 = datumToInt(datum2);
+  return d1 > d2;
 }
 
 

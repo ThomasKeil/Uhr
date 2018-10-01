@@ -11,9 +11,11 @@ struct periode {
 
 struct periode calculatePeriode(struct datum datum1, struct datum datum2);
 int daysInFebruary(int jahr);
+struct datum getNextWeddingDayDate(struct datum now, struct datum hochzeitstag);
 int datumToInt(struct datum datum);
 int getTagesnummer(struct datum datum);
 int isSmaller(struct datum datum1, struct datum datum2);
+int isLarger(struct datum datum1, struct datum datum2);
 int isEqual(struct datum datum1, struct datum datum2);
 int getDaysInMonth(int month, int year);
 

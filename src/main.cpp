@@ -37,7 +37,7 @@
   bool wifi_wlan = false;
 #endif
 
-#include "clockutils.h";
+#include "clockutils.h"
 #include "schnapszahlen.h"
 #include "datecalculations.h"
 #include "displayinfos.h"
@@ -270,7 +270,7 @@ void loop(void) {
 #endif
     if (time_is_present) {
       struct datum today = getNow();
-      struct datum next = getNextWeddingDayDate(hochzeitstag);
+      struct datum next = getNextWeddingDayDate(today, hochzeitstag);
       int count = next.jahr - hochzeitstag.jahr;
 
       Serial.printf("Next: %i.%i.%i, der %i.\n", next.tag, next.monat, next.jahr, count);
@@ -297,7 +297,7 @@ void loop(void) {
       char description[40];
       char text[40];
 
-      if (false && day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
+      if (day() == hochzeitstag.tag && month() == hochzeitstag.monat)  // Ist gerade Hochzeitstag?
       {
         if (count > 0) {
           Serial.printf("Hochzeitstag %i wird gezeigt.\n", count);

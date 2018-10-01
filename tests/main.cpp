@@ -13,7 +13,9 @@ void print_datum(struct datum datum) {
 }
 
 void test_periode(struct datum start, struct datum ende, struct datum assert_datum) {
+  print_datum(start);
   print_datum(ende);
+  print_datum(assert_datum);
 
   struct periode result = calculatePeriode(start, ende);
   print_result(result);
@@ -52,16 +54,27 @@ int main() {
 
 
 
-  struct datum start = { 21, 9, 2018, 15};
-  struct datum ende;
-  struct datum assert_datum;
+  struct datum start = { 22, 9, 2018, 15};
+  struct datum ende, now, assert_datum, next_wedding_day;
 
   print_datum(start);
   printf("\n");
 
-  ende = (struct datum ) {21, 9, 2018, 18};
+  ende = (struct datum ) {22, 9, 2018, 18};
   assert_datum = (struct datum ) {0, 0, 0, 3};
   test_periode(start, ende,assert_datum);
+
+  // Now some "real" dates with calculations
+
+  struct datum wedding_day = { 22, 9, 2018, 15};
+  ende = (struct datum ) {22, 9, 2018, 18};
+
+
+  now = (struct datum) {22, 9, 2018, 18};
+  next_wedding_day = getNextWeddingDayDate(now, wedding_day);
+  assert_datum = (struct datum ) {30, 11, 0, 21};
+  test_periode(now, next_wedding_day, assert_datum);
+
   /*
 
   ende = (struct datum ) {14, 9, 2018, 8};
